@@ -1,0 +1,50 @@
+@*
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+<head>
+    <script src="//d3js.org/d3.v4.0.0-alpha.4.min.js"></script>
+    <script type="text/javascript" src='@routes.Assets.at("javascripts/data.js")'></script>
+</head>
+<body>
+*@@*    <div id="loading-gif">
+        <img style="align-self: center" src="@routes.Assets.at("images/loading.gif")" alt="Loading"/>
+    </div>*@@*
+    <h1>Instances of jokes about my name, 2004-2014</h1>
+
+    <svg>
+        <g id="canvas">
+            <g id="art" />
+            <g id="labels" /></g>
+    </svg>
+    <p>It could be worse, I could have been named "Michael Bolton."</p>
+</body>
+</html>*@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <title>Testing Pie Chart</title>
+
+        <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?2.4.5"></script>
+        <script type="text/javascript" src='@routes.Assets.at("javascripts/data.js")'></script>
+        <link rel="stylesheet" type="text/css" src="@routes.Assets.at("stylesheets/main.css")">
+
+    </head>
+    <body>
+        <table>
+            <tr><td><h2>Amount of articles per author</h2></td></tr>
+        </table>
+        <div id="pie-container">
+
+        </div>
+        <table>
+            <tr><td><h2>Amount of articles per hour</h2></td></tr>
+        </table>
+        <div id="scatterplot">
+        </div>
+
+    </body>
+</html>
+
