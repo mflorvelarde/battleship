@@ -1,15 +1,14 @@
 package hubs;
 
-import java.util.Set;
+import model.FinishedGameStatus;
+import model.Position;
 
 /**
  * Created by tomasnajun on 01/06/16.
  */
 public interface GamePage {
-    public void userJoined(String username);
-    public void sendMessage(String username, String message);
-    public void userLeftGame(String username);
-    public void userJoinedGame(String username);
-    public void gameList(Set<String> rooms);
-    public void userList(Set<String> users);
+    public void oponentJoined(long facebookId);
+    public void oppenentJoinedGame(long facebookId);
+    public void receiveShoot(Position position, boolean hit);
+    public void endGame(FinishedGameStatus status);
 }

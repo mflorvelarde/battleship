@@ -1,7 +1,7 @@
 package model;
 
 import com.avaje.ebean.Model;
-
+import org.jetbrains.annotations.Nullable;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +23,13 @@ public class Player extends Model {
     public Statistics statistics;
 
     public static Finder<Long, Player> find = new Finder<Long, Player>(Player.class);
+
+    @Nullable
+    public static Player findByFacebookId(long facebookId) {
+        final List<Player> players = find.where().eq("facebookId", facebookId).findList();
+        if (players.size() > 0) return players.get(0);
+        return   null;
+    }
 
 
     public Player(String name, long facebookId) {

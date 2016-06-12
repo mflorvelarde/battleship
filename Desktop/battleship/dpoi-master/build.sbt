@@ -18,6 +18,9 @@ libraryDependencies ++= Seq(
   "org.webjars" %% "webjars-play" % "2.3.0-2",
   "org.webjars" % "bootstrap" % "3.3.1",
   "org.webjars" % "jquery" % "2.1.1"
+//   http://mvnrepository.com/artifact/org.avaje.ebeanorm/querybean-generator
+//  "org.avaje.ebeanorm" % "querybean-generator" % "2.2.1",
+//  "org.avaje.ebeanorm" % "avaje-ebeanorm-querybean" % "7.13.1"
 )
 
 lazy val myProject = (project in file("."))
