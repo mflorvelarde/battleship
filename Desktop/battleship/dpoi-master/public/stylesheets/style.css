@@ -1,0 +1,56 @@
+.draggable {
+    float: left;
+    font-size: .9em;
+    height: 40px;
+    background-color: #369;
+    border-radius: 15px;
+}
+
+.length-1 {
+    width: 50px;
+}
+
+.length-2 {
+    width: 100px;
+}
+
+.length-3 {
+    width: 150px;
+}
+
+.orient-v {
+    -webkit-transform: translateY(-100%) rotate(90deg);
+    -moz-transform: translateY(-100%) rotate(90deg);
+    /*-moz-transform-origin: right top; */
+    -ms-transform: translateY(-100%) rotate(90deg);
+    -o-transform: translateY(-100%) rotate(90deg);
+    transform: translateY(-100%) rotate(90deg);
+    -webkit-transform-origin: left bottom;
+    -moz-transform-origin: left bottom;
+    -ms-transform-origin: left bottom;
+    -o-transform-origin: left bottom;
+    transform-origin: left bottom;
+}
+
+
+
+.ui-widget-header p, .ui-widget-content p {
+    margin: 0;
+}
+
+.board {
+    width: 508px;
+    height: 508px;
+    border: 2px solid #ccc;
+}
+
+.cell {
+    width: 50px;
+    margin: 0;
+    padding: 0;
+    height: 50px;
+    border: 1px solid #ccc;
+    position: relative;
+    float: left;
+}
+
