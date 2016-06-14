@@ -41,7 +41,7 @@
 .board {
     width: 508px;
     height: 508px;
-    border: 2px solid #ccc;
+    border: 2px 2px 2px 0px solid #ccc;
 }
 
 .cell {
@@ -54,3 +54,10 @@
     float: left;
 }
 
+.fired-cell {
+    background-color: darkred;
+}
+
+.water-cell {
+    background-color: #1b6d85;
+}

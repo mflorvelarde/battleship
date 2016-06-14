@@ -1,50 +1,22 @@
-#loading-gif {
-    display: none;
-    margin: 0 auto;
-}
-
-.slice text {
-    font-size: 10pt;
-    font-family: Arial;
-}
-
-table {
+#header-navbar {
+    height: 50px;
     width: 100%;
-    color: #b0e0f8;
+    margin-bottom: 20px;
 }
 
-
-.chart {
-    background: #b0e0f8;
-    margin: 5px;
+#header-container {
+    width: 100%
 }
 
-.chart rect {
-    stroke: white;
-    fill: steelblue;
-}
-.chart text {
-    fill: white;
+.game-navbar {
+    height: 40px;
+
 }
 
-.chart text.name {
-    fill: #000;
+.board-header {
+    width: 100%;
 }
 
-.chart line {
-    stroke: #c1c1c1;
-}
-
-.chart .rule {
-    fill: #000;
-}
-
-/* removed the while stroke as we don't need it anymore */
-#step-5 .chart rect {
-    stroke: none;
-}
-
-/* a bit of hovering effect for each bar */
-#step-5 .chart rect:hover {
-    fill: #64707D;
+#game-container {
+    width: 100%;
 }
