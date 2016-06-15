@@ -19,7 +19,7 @@ public class Player extends Model {
     public List<Game> gamesWon;
     @OneToMany(mappedBy = "looser")
     public List<Game> gamesLost;
-    @JoinColumn(name = "player", referencedColumnName = "id")
+    @JoinColumn(name = "statistics", referencedColumnName = "id")
     public Statistics statistics;
 
     public static Finder<Long, Player> find = new Finder<Long, Player>(Player.class);

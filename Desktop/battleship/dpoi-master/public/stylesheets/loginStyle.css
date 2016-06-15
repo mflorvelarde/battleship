@@ -1,0 +1,15 @@
+#login-table {
+    position: relative;
+    left: 35%;
+    top: 200px;
+    width: 30%;
+    height: 250px;
+    vertical-align: middle;
+    horiz-align: center;
+    border: 2px solid #ccc;
+    border-radius: 30px;
+}
+
+#fb-button {
+    width: 340px;
+}

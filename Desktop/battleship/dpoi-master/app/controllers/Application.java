@@ -17,14 +17,18 @@ public class Application extends Controller {
 
     @Transactional
     public static Result home() {
-        return ok(home.render());
+        //TODO: Revisar
+        if (session("connected") == null) return forbidden(login.render());
+        else return ok(home.render(session("connected")));
     }
 
     @Transactional
     public static Result play() {
-        return ok(game.render());
+        if (session("connected") == null) return forbidden(login.render());
+        else return ok(game.render());
     }
 
+    @Transactional
     public static Result login() {
         return ok(login.render());
     }

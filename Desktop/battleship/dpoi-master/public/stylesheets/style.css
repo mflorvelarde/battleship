@@ -2,7 +2,7 @@
     float: left;
     font-size: .9em;
     height: 40px;
-    background-color: #369;
+    background: #ccc;
     border-radius: 15px;
 }
 
@@ -32,6 +32,21 @@
     transform-origin: left bottom;
 }
 
+#ready-button {
+    margin-top: 7px;
+    margin-right: 7px;
+    background-color: #A9BCF5;
+    border-color: #5882FA;
+}
+
+#ready-titles {
+    margin-left: 13px;
+    margin-top: 13px;
+}
+
+#ready-button:hover {
+    background-color: #CEECF5;
+}
 
 
 .ui-widget-header p, .ui-widget-content p {
@@ -55,9 +70,36 @@
 }
 
 .fired-cell {
-    background-color: darkred;
+    background-color: #F78181;
 }
 
 .water-cell {
-    background-color: #1b6d85;
+    background-color: #CEF6F5;
 }
+#header-navbar {
+    height: 50px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#header-container {
+    width: 100%
+}
+
+.game-navbar {
+    height: 40px;
+
+}
+
+.board-header {
+    width: 100%;
+}
+
+#game-container {
+    width: 100%;
+}
+
+.wrong-location {
+    background: #F78181;
+}
+

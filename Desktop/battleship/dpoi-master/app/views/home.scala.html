@@ -1,6 +1,9 @@
+@(user: String)
+
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="@routes.Assets.at("javascripts/userInfo.js")"></script>
 </head>
 
 <body>
@@ -11,7 +14,7 @@
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav navbar-right">
                             <li>
-                                <a href="#">Link</a>
+                                <h4 id="user-name"></h4>
                             </li>
                         </ul>
                     </div>
@@ -21,9 +24,8 @@
                     <div class="col-md-8">
                         <div class="jumbotron">
                             <h2>Welcome to Battleship!</h2>
-                            <p>
-							This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.
-                            </p>
+                                <p>Start by placing all your battleships on the map. Doubleclick the ships to rotate it</p>
+                                <p>At each turn, click on the grid to locate and destroy your opponent's ships</p>
                             <p>
                                 <a class="btn btn-primary btn-large" href="/play">Play</a>
                             </p>

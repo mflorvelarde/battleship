@@ -2,12 +2,11 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>jQuery UI Draggable - Snap to element or grid</title>
+        <title>Battleship</title>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
         <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <link rel="stylesheet" href="@routes.Assets.at("stylesheets/style.css")">
-        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
         <link rel="stylesheet" href="@routes.Assets.at("stylesheets/bootstrap-theme.min.css")">
         <link rel="stylesheet" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
         <script src="@routes.Assets.at("javascripts/data.js")"></script>
@@ -32,116 +31,121 @@
         <div class="container" id="game-container">
             <div class="row">
                 <div class="col-md-6 board-header">
-                    <nav class="navbar navbar-default game-navbar" role="navigation">
+                    <nav class="navbar navbar-default" role="navigation">
+                        <div class="navbar-header">
+                            <h4 id="ready-titles">Your board</h4>
+                        </div>
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <label>Your board</label>
+                                    <button id="ready-button" type="button" class="btn btn-default"
+                                            onclick="setReadyToPlay(this)">Ready!</button>
                                 </li>
                             </ul>
                         </div>
                     </nav>
-                    <div class="board containment-wrapper ">
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
-                        <div class="cell"></div>
+                    <div id="player-board" class="board containment-wrapper ">
+                        <div id="cell-1" class="cell"></div>
+                        <div id="cell-2" class="cell"></div>
+                        <div id="cell-3" class="cell"></div>
+                        <div id="cell-4" class="cell"></div>
+                        <div id="cell-5" class="cell"></div>
+                        <div id="cell-6" class="cell"></div>
+                        <div id="cell-7" class="cell"></div>
+                        <div id="cell-8" class="cell"></div>
+                        <div id="cell-9" class="cell"></div>
+                        <div id="cell-10" class="cell"></div>
+                        <div id="cell-11" class="cell"></div>
+                        <div id="cell-12" class="cell"></div>
+                        <div id="cell-13" class="cell"></div>
+                        <div id="cell-14" class="cell"></div>
+                        <div id="cell-15" class="cell"></div>
+                        <div id="cell-16" class="cell"></div>
+                        <div id="cell-17" class="cell"></div>
+                        <div id="cell-18" class="cell"></div>
+                        <div id="cell-19" class="cell"></div>
+                        <div id="cell-20" class="cell"></div>
+                        <div id="cell-21" class="cell"></div>
+                        <div id="cell-22" class="cell"></div>
+                        <div id="cell-23" class="cell"></div>
+                        <div id="cell-24" class="cell"></div>
+                        <div id="cell-25" class="cell"></div>
+                        <div id="cell-26" class="cell"></div>
+                        <div id="cell-27" class="cell"></div>
+                        <div id="cell-28" class="cell"></div>
+                        <div id="cell-29" class="cell"></div>
+                        <div id="cell-30" class="cell"></div>
+                        <div id="cell-31" class="cell"></div>
+                        <div id="cell-32" class="cell"></div>
+                        <div id="cell-33" class="cell"></div>
+                        <div id="cell-34" class="cell"></div>
+                        <div id="cell-35" class="cell"></div>
+                        <div id="cell-36" class="cell"></div>
+                        <div id="cell-37" class="cell"></div>
+                        <div id="cell-38" class="cell"></div>
+                        <div id="cell-39" class="cell"></div>
+                        <div id="cell-40" class="cell"></div>
+                        <div id="cell-41" class="cell"></div>
+                        <div id="cell-42" class="cell"></div>
+                        <div id="cell-43" class="cell"></div>
+                        <div id="cell-44" class="cell"></div>
+                        <div id="cell-45" class="cell"></div>
+                        <div id="cell-46" class="cell"></div>
+                        <div id="cell-47" class="cell"></div>
+                        <div id="cell-48" class="cell"></div>
+                        <div id="cell-49" class="cell"></div>
+                        <div id="cell-50" class="cell"></div>
+                        <div id="cell-51" class="cell"></div>
+                        <div id="cell-52" class="cell"></div>
+                        <div id="cell-53" class="cell"></div>
+                        <div id="cell-54" class="cell"></div>
+                        <div id="cell-55" class="cell"></div>
+                        <div id="cell-56" class="cell"></div>
+                        <div id="cell-57" class="cell"></div>
+                        <div id="cell-58" class="cell"></div>
+                        <div id="cell-59" class="cell"></div>
+                        <div id="cell-60" class="cell"></div>
+                        <div id="cell-61" class="cell"></div>
+                        <div id="cell-62" class="cell"></div>
+                        <div id="cell-63" class="cell"></div>
+                        <div id="cell-64" class="cell"></div>
+                        <div id="cell-65" class="cell"></div>
+                        <div id="cell-66" class="cell"></div>
+                        <div id="cell-67" class="cell"></div>
+                        <div id="cell-68" class="cell"></div>
+                        <div id="cell-69" class="cell"></div>
+                        <div id="cell-70" class="cell"></div>
+                        <div id="cell-71" class="cell"></div>
+                        <div id="cell-72" class="cell"></div>
+                        <div id="cell-73" class="cell"></div>
+                        <div id="cell-74" class="cell"></div>
+                        <div id="cell-75" class="cell"></div>
+                        <div id="cell-76" class="cell"></div>
+                        <div id="cell-77" class="cell"></div>
+                        <div id="cell-78" class="cell"></div>
+                        <div id="cell-79" class="cell"></div>
+                        <div id="cell-80" class="cell"></div>
+                        <div id="cell-81" class="cell"></div>
+                        <div id="cell-82" class="cell"></div>
+                        <div id="cell-83" class="cell"></div>
+                        <div id="cell-84" class="cell"></div>
+                        <div id="cell-85" class="cell"></div>
+                        <div id="cell-86" class="cell"></div>
+                        <div id="cell-87" class="cell"></div>
+                        <div id="cell-88" class="cell"></div>
+                        <div id="cell-89" class="cell"></div>
+                        <div id="cell-90" class="cell"></div>
+                        <div id="cell-91" class="cell"></div>
+                        <div id="cell-92" class="cell"></div>
+                        <div id="cell-93" class="cell"></div>
+                        <div id="cell-94" class="cell"></div>
+                        <div id="cell-95" class="cell"></div>
+                        <div id="cell-96" class="cell"></div>
+                        <div id="cell-97" class="cell"></div>
+                        <div id="cell-98" class="cell"></div>
+                        <div id="cell-99" class="cell"></div>
+                        <div id="cell-100" class="cell"></div>
                     </div>
                     <div>
                         <div id="ship-1" class="draggable ui-widget-content orient-h length-1" ondblclick="rotateShip(id)">
@@ -163,13 +167,9 @@
                     </div>
                 </div>
                 <div class="col-md-6 board-header">
-                    <nav class="navbar navbar-default game-navbar" role="navigation">
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <ul class="nav navbar-nav navbar-right">
-                                <li>
-                                    <label>Your opponent board</label>
-                                </li>
-                            </ul>
+                    <nav class="navbar navbar-default" role="navigation">
+                        <div class="navbar-header">
+                            <h4 id="ready-titles">Your board</h4>
                         </div>
                     </nav>
                     <div class="board containment-wrapper ">
@@ -275,8 +275,20 @@
                         <div class="cell" onclick="shoot(this)"></div>
                     </div>
 
+                    <div>
+
+                        <button type="button" class="btn btn-default" onclick="">Suggest shot</button>
+                    </div>
                 </div>
             </div>
         </div>
     </body>
 </html>
+
+
+
+<div id="dialog-message" title="Download complete">
+   <h2>You Won !</h2>
+</div>
+
+

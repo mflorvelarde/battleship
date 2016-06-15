@@ -22,10 +22,10 @@ create sequence player_seq;
 
 create table statistics (
   id                            bigint not null,
-  statistics                    bigint,
+  player                        bigint,
   wins                          integer,
   looses                        integer,
-  constraint uq_statistics_statistics unique (statistics),
+  constraint uq_statistics_player unique (player),
   constraint pk_statistics primary key (id)
 );
 create sequence statistics_seq;
@@ -36,7 +36,7 @@ create index ix_game_gameswon on game (gameswon);
 alter table game add constraint fk_game_gameslost foreign key (gameslost) references player (id) on delete restrict on update restrict;
 create index ix_game_gameslost on game (gameslost);
 
-alter table statistics add constraint fk_statistics_statistics foreign key (statistics) references player (id) on delete restrict on update restrict;
+alter table statistics add constraint fk_statistics_player foreign key (player) references player (id) on delete restrict on update restrict;
 
 
 # --- !Downs
@@ -47,7 +47,7 @@ drop index if exists ix_game_gameswon;
 alter table game drop constraint if exists fk_game_gameslost;
 drop index if exists ix_game_gameslost;
 
-alter table statistics drop constraint if exists fk_statistics_statistics;
+alter table statistics drop constraint if exists fk_statistics_player;
 
 drop table if exists game;
 drop sequence if exists game_seq;

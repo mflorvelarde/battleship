@@ -1,10 +1,62 @@
+/*window.onload = function {
+    var hub = $.connection.gameHub;
+    $.connection.hub.start().done(function)
+}*/
+
+var board = [0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0
+];
+
+
 $(function () {
+    $(function() {
+    $( "#back-draggable" ).draggable({ revert: true });
     $(".draggable").draggable({
         grid: [50, 50], containment: ".containment-wrapper", scroll: false,
         stop: function() {
             var columna = ( Math.floor(($(this).position().left) / 50) ) + 1;
-            var fila = Math.floor(($(this).position().top) / 50)
-            alert(fila);
+            var fila = Math.floor(($(this).position().top) / 50);
+            var orientation;
+            var length;
+            var id = this.getAttribute("id");
+
+            if (this.className.match(/(?:^|\s)orient-v(?!\S)/)) {
+                orientation = "orient-v";
+            }
+            else {
+                orientation = "orient-h";
+            }
+
+            if (this.className.match(/(?:^|\s)length-1(?!\S)/)) length = 1;
+            else if (this.className.match(/(?:^|\s)length-2(?!\S)/)) length = 2;
+            else length = 3;
+
+            var cell= (10 * ( fila - 1)) + columna;
+
+            for(i = 1; i <=100; i++) {
+                if(board[i] == id) board[i] = 0;
+            }
+
+            if (verifyCellsAvailability(columna,fila, orientation, length)) {
+                if (document.getElementById(id).className.match(/(?:^|\s)wrong-location(?!\S)/)) {
+                    document.getElementById(id).className = document.getElementById(id).className.replace(/(?:^|\s)wrong-location(?!\S)/g , '' );
+                }
+                locateShip(columna, fila,orientation,length, id);
+            }
+            else {
+                document.getElementById(id).className += " wrong-location";
+                alert("Ops! You already have a ship on that position");
+            }
+
+
 
         }
     });
@@ -22,8 +74,6 @@ function rotateShip(id) {
 function shoot(element) {
     var fila = ((element.offsetTop) - 20 ) / 50;
     var columna = ((element.offsetLeft - 15 ) / 50 ) + 1;
-    alert("shoot");
-    turnCellToFire(element);
 }
 
 function turnCellToFire(element) {
@@ -34,4 +84,46 @@ function turnCellToFire(element) {
 
 function turnCellToWater(element) {
     element.className += " water-cell"
+}
+
+function locateShip(x,y,orientation, length, id) {
+    var cell = (10 * ( y - 1)) + x;
+    if (orientation == "orient-v") {
+        var last = cell + 10 * (length - 1) ;
+        for (var j= cell;j <= last ; j +=10) {
+            board[j - 1] = id;
+        }
+    } else {
+        for (i = cell; i < (cell + length); i++) {
+            board[i - 1] = id;
+        }
+    }
+}
+
+function verifyCellsAvailability(x,y, orientation, length) {
+    var cell = (10 * ( y - 1)) + x;
+    if (orientation == "orient-v") {
+        var last = cell + 10 * (length - 1);
+        for (i= cell; i <= last ; i += 10) {
+            if (board[i - 1] != 0) return false;
+        }
+    } else {
+        for (i = cell; i < (cell + length); i++) {
+            if (board[i - 1] != 0) return false;
+        }
+    }
+    return true;
+}
+
+function receiveShot(x, y) {
+    var cellNumber = (10 * ( y - 1)) + x;
+    var cellId = "cell-" + cellNumber.toString();
+    if (board[cellNumber - 1] == 0) document.getElementById(cellId).className += " water-cell";
+    else document.getElementById(cellId).className += " fired-cell";
+}
+
+function setReadyToPlay(element) {
+    element.style.display = 'none';
+    var id;
+    document.getElementById("ship-1").className = document.getElementById(id).className.replace(/(?:^|\s)draggable(?!\S)/g , '' );
 }

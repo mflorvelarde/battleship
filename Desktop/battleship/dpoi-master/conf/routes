@@ -6,10 +6,11 @@
 #GET         /metrics                          controllers.HomeController.metrics()
 GET         /assets/*file                  controllers.Assets.at(path="/public", file)
 GET         /                              controllers.Application.home()
-GET         /play                         controllers.Application.play()
+GET         /play                          controllers.Application.play()
 GET         /login                         controllers.Application.login()
 POST        /api/authenticate/:user        controllers.PlayerController.authenticate(user: String)
-
+GET         /api/users/:facebookId         controllers.PlayerController.getUserByFacebookId(facebookId: String )
+GET         /api/users/:id/statisctics     controllers.StatisticsController.getPlayerStattistics(id: String)
 
 # An example controller showing how to use dependency injection
 #GET     /count                      controllers.CountController.count

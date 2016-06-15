@@ -1,13 +1,15 @@
 package controllers;
 
+import com.avaje.ebean.Ebean;
+import model.Player;
 import play.db.ebean.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.login;
+import views.html.home;
+import org.json.JSONObject;
+import static play.libs.Json.toJson;
 
 import java.util.HashMap;
-import java.lang.Long;
-import java.util.Set;
 
 /**
  * Created by florenciavelarde on 8/6/16.
@@ -15,10 +17,10 @@ import java.util.Set;
 public class PlayerController extends Controller {
     @Transactional
     public static Result authenticate(String user) {
-        System.out.println(user);
         HashMap<Long, String> userInfo = parseUser(user);
-        System.out.println(userInfo);
-        return ok(login.render());
+        String id = userInfo.keySet().iterator().next().toString();
+        session("connected", id);
+        return ok(home.render(session("connected")));
     }
 
     private static HashMap<Long, String> parseUser (String user) {
@@ -56,5 +58,10 @@ public class PlayerController extends Controller {
         HashMap<Long, String> result = new HashMap<>();
         result.put(facebookId, name);
         return result;
+    }
+
+    public static Result getUserByFacebookId(String facebookId) {
+        Player player = Ebean.find(Player.class).where().eq("FACEBOOK_ID", Long.parseLong(facebookId)).findUnique();
+        return ok(toJson(player));
     }
 }
