@@ -4,13 +4,13 @@
 
 # An example controller showing a sample home page
 #GET         /metrics                          controllers.HomeController.metrics()
-GET         /assets/*file                  controllers.Assets.at(path="/public", file)
-GET         /                              controllers.Application.home()
-GET         /play                          controllers.Application.play()
-GET         /login                         controllers.Application.login()
-POST        /api/authenticate/:user        controllers.PlayerController.authenticate(user: String)
-GET         /api/users/:facebookId         controllers.PlayerController.getUserByFacebookId(facebookId: String )
-GET         /api/users/:id/statisctics     controllers.StatisticsController.getPlayerStattistics(id: String)
+GET         /assets/*file                     controllers.Assets.at(path="/public", file)
+GET         /play                             controllers.Application.play()
+GET         /login                            controllers.Application.login()
+POST        /api/authenticate/:user           controllers.PlayerController.authenticate(user: String)
+GET         /api/users/:facebookId            controllers.PlayerController.getUserByFacebookId(facebookId: String )
+GET         /api/users/:id/statisctics        controllers.StatisticsController.getPlayerStattistics(id: String)
+GET         /                                 controllers.Application.home()
 
 # An example controller showing how to use dependency injection
 #GET     /count                      controllers.CountController.count
@@ -20,4 +20,4 @@ GET         /api/users/:id/statisctics     controllers.StatisticsController.getP
 # Map static resources from the /public folder to the /assets URL path
 
 #Add SignalJ Routes
-#->     /         					signalJ.Routes
+#->     /         					signal.Routes

@@ -20,7 +20,7 @@
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <a href="#">Leave Game</a>
+                                    <a href="/home">Leave Game</a>
                                 </li>
                             </ul>
                         </div>
@@ -148,7 +148,7 @@
                         <div id="cell-100" class="cell"></div>
                     </div>
                     <div>
-                        <div id="ship-1" class="draggable ui-widget-content orient-h length-1" ondblclick="rotateShip(id)">
+                        <div id="ship-1" class="draggable ui-widget-content ship orient-h length-1" ondblclick="rotateShip(id)">
                     </div>
                         <div id="ship-2" class="draggable ui-widget-content orient-h length-1" ondblclick="rotateShip(id)">
                     </div>
@@ -278,6 +278,7 @@
                     <div>
 
                         <button type="button" class="btn btn-default" onclick="">Suggest shot</button>
+                        <button type="button" class="btn btn-default" onclick="openWinnningModal()">Sot</button>
                     </div>
                 </div>
             </div>
@@ -286,9 +287,5 @@
 </html>
 
 
-
-<div id="dialog-message" title="Download complete">
-   <h2>You Won !</h2>
-</div>
 
 

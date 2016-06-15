@@ -6,10 +6,10 @@ import play.db.ebean.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.home;
-import org.json.JSONObject;
-import static play.libs.Json.toJson;
 
 import java.util.HashMap;
+
+import static play.libs.Json.toJson;
 
 /**
  * Created by florenciavelarde on 8/6/16.
@@ -19,8 +19,19 @@ public class PlayerController extends Controller {
     public static Result authenticate(String user) {
         HashMap<Long, String> userInfo = parseUser(user);
         String id = userInfo.keySet().iterator().next().toString();
-        session("connected", id);
-        return ok(home.render(session("connected")));
+
+        if (getUserByFacebookId(id) == null) crateUser(id, userInfo.get(id));
+
+        session("player", id);
+      //  session().put("player", id);
+
+       // session("player", id);
+        return ok(home.render(id));
+    }
+
+    private static void crateUser(String id, String name) {
+        Player player = new Player(name, Long.parseLong(id));
+        Ebean.save(player);
     }
 
     private static HashMap<Long, String> parseUser (String user) {
@@ -62,6 +73,7 @@ public class PlayerController extends Controller {
 
     public static Result getUserByFacebookId(String facebookId) {
         Player player = Ebean.find(Player.class).where().eq("FACEBOOK_ID", Long.parseLong(facebookId)).findUnique();
-        return ok(toJson(player));
+        if (player == null) return null;
+        else return ok(toJson(player));
     }
 }

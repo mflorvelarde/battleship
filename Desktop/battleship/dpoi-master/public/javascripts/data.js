@@ -17,8 +17,6 @@ var board = [0,0,0,0,0,0,0,0,0,0,
 
 
 $(function () {
-    $(function() {
-    $( "#back-draggable" ).draggable({ revert: true });
     $(".draggable").draggable({
         grid: [50, 50], containment: ".containment-wrapper", scroll: false,
         stop: function() {
@@ -80,7 +78,8 @@ function turnCellToFire(element) {
     element.className += " fired-cell";
     element.disabled = true;
     $element.prop( "onclick", null );
-    console.log( "onclick property: ", $element[ 0 ].onclick );}
+    console.log( "onclick property: ", $element[ 0 ].onclick );
+}
 
 function turnCellToWater(element) {
     element.className += " water-cell"
@@ -122,8 +121,23 @@ function receiveShot(x, y) {
     else document.getElementById(cellId).className += " fired-cell";
 }
 
+
 function setReadyToPlay(element) {
     element.style.display = 'none';
     var id;
-    document.getElementById("ship-1").className = document.getElementById(id).className.replace(/(?:^|\s)draggable(?!\S)/g , '' );
+    document.getElementById("ship-1").className = document.getElementById("ship-1").className.replace(/(?:^|\s)draggable(?!\S)/g , ' ship-fixed' );
+    document.getElementById("player-board").className = document.getElementById("player-board").className.replace(/(?:^|\s)containment-wrapper(?!\S)/g , ' ' );
+    document.getElementById("ship-1").className = document.getElementById("ship-1").className.replace(/(?:^|\s)ui-draggable(?!\S)/g , ' ' );
+    document.getElementById("ship-1").className = document.getElementById("ship-1").className.replace(/(?:^|\s)ui-draggable-handle(?!\S)/g , ' ' );
+     // document.getElementById("ship-1").className += " ship-fixed";
+}
+
+function openWinnningModal() {
+    alert("Congratulations: you won!");
+    window.location.href = "/";
+}
+
+function openLoosingModal() {
+    alert("Ooohh: you lost!");
+    window.location.href = "/";
 }

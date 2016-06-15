@@ -1,5 +1,6 @@
 package controllers;
 
+import model.Statistics;
 import play.db.ebean.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -17,14 +18,13 @@ public class Application extends Controller {
 
     @Transactional
     public static Result home() {
-        //TODO: Revisar
-        if (session("connected") == null) return forbidden(login.render());
-        else return ok(home.render(session("connected")));
+        if (session("player") == null) return forbidden(login.render());
+        return ok(home.render(session("player")));
     }
 
     @Transactional
     public static Result play() {
-        if (session("connected") == null) return forbidden(login.render());
+        if (session("player") == null) return forbidden(login.render());
         else return ok(game.render());
     }
 
@@ -32,4 +32,5 @@ public class Application extends Controller {
     public static Result login() {
         return ok(login.render());
     }
+
 }

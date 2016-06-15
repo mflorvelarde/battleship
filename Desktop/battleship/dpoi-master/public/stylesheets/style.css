@@ -6,6 +6,14 @@
     border-radius: 15px;
 }
 
+.ship {
+    float: left;
+    font-size: .9em;
+    height: 40px;
+    background: #ccc;
+    border-radius: 15px;
+}
+
 .length-1 {
     width: 50px;
 }
@@ -103,3 +111,6 @@
     background: #F78181;
 }
 
+.winning-modal {
+    display: none;
+}

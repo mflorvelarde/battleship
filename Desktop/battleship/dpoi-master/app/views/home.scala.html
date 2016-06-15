@@ -1,4 +1,4 @@
-@(user: String)
+@(user: String, won: String, lost: String)
 
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
@@ -14,7 +14,7 @@
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav navbar-right">
                             <li>
-                                <h4 id="user-name"></h4>
+                                <h4 id="user-name">Battleship</h4>
                             </li>
                         </ul>
                     </div>
@@ -24,11 +24,10 @@
                     <div class="col-md-8">
                         <div class="jumbotron">
                             <h2>Welcome to Battleship!</h2>
-                                <p>Start by placing all your battleships on the map. Doubleclick the ships to rotate it</p>
+                                <p>Start by placing all your battleships on the map</p>
+                                <p> Doubleclick the ships to rotate it</p>
                                 <p>At each turn, click on the grid to locate and destroy your opponent's ships</p>
-                            <p>
-                                <a class="btn btn-primary btn-large" href="/play">Play</a>
-                            </p>
+                            <p><a class="btn btn-primary btn-large" href="/play">Play</a></p>
                         </div>
                     </div>
                     <div class="col-md-4">
