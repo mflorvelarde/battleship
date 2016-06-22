@@ -1,11 +1,9 @@
 package model;
 
 import com.avaje.ebean.Model;
+import org.jetbrains.annotations.NotNull;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.Date;
 
 import static org.joda.time.DateTime.now;
@@ -17,6 +15,8 @@ import static org.joda.time.DateTime.now;
 public class Game extends Model {
     @Id
     private long id;
+    private String facebookId;
+    private String currentPlayerFbId;
     private Date date;
     @ManyToOne
     @JoinColumn(name = "gamesWon", referencedColumnName = "id")
@@ -24,16 +24,21 @@ public class Game extends Model {
     @ManyToOne
     @JoinColumn(name = "gamesLost", referencedColumnName = "id")
     private Player looser;
-    private GameBoard board1, board2;
+//    @OneToOne
+//    @JoinColumn(name = "playerBoard", referencedColumnName = "id")
+    private GameBoard playerBoard;
+//    @OneToOne
+//    @JoinColumn(name = "opponentBoard", referencedColumnName = "id")
+    private GameBoard opponentBoard;
 
     public Game(Player player1, Player player2) {
-        board1 = new GameBoard(player1);
-        board2 = new GameBoard(player2);
+        playerBoard = new GameBoard(player1);
+        opponentBoard = new GameBoard(player2);
         date = now().toDate();
     }
 
     public Game(Player player1) {
-        this.board1 = new GameBoard(player1);
+        this.playerBoard = new GameBoard(player1);
         date = now().toDate();
     }
 
@@ -51,27 +56,36 @@ public class Game extends Model {
         return looser;
     }
 
-    public GameBoard getBoard1() {
-        return board1;
+    public GameBoard getPlayerBoard() {
+        return playerBoard;
     }
 
-    public GameBoard getBoard2() {
-        return board2;
+    public GameBoard getOpponentBoard() {
+        return opponentBoard;
     }
 
-    private void setBoard2(GameBoard board2) {
-        this.board2 = board2;
+    private void setOpponentBoard(GameBoard opponentBoard) {
+        this.opponentBoard = opponentBoard;
     }
 
     public void setPlayer2(Player player2) {
         final GameBoard gameBoard = new GameBoard(player2);
-        setBoard2(gameBoard);
+        setOpponentBoard(gameBoard);
     }
 
     public long getId() {
         return id;
     }
 
+    public String getCurrentPlayerFbId() {
+        return currentPlayerFbId;
+    }
+
+    public GameBoard getPlayerGameBoard(Player player) {
+        if (playerBoard.getOwner().getId() == player.getId()) {
+            return playerBoard;
+        } else return opponentBoard;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -87,4 +101,9 @@ public class Game extends Model {
     public int hashCode() {
         return (int) (id ^ (id >>> 32));
     }
+
+    public void setCurrentPlayerFbId(String fbId) {
+        currentPlayerFbId = fbId;
+    }
+
 }

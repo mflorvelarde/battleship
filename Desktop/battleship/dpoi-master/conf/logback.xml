@@ -33,6 +33,12 @@
   <logger name="com.avaje.ebeaninternal.server.lib.BackgroundThread" level="OFF" />
   <logger name="com.gargoylesoftware.htmlunit.javascript" level="OFF" />
 
+  <!-- actors logging -->
+  <logger name="akka.actor" level="DEBUG"/>
+
+  <logger name="actors.PlayerParentActor" level="INFO"/>
+  <logger name="actors.PlayerActor" level="INFO"/>
+
   <root level="WARN">
     <appender-ref ref="ASYNCFILE" />
     <appender-ref ref="ASYNCSTDOUT" />

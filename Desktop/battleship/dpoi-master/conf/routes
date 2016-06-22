@@ -10,7 +10,9 @@ GET         /login                            controllers.Application.login()
 POST        /api/authenticate/:user           controllers.PlayerController.authenticate(user: String)
 GET         /api/users/:facebookId            controllers.PlayerController.getUserByFacebookId(facebookId: String )
 GET         /api/users/:id/statisctics        controllers.StatisticsController.getPlayerStattistics(id: String)
-GET         /                                 controllers.Application.home()
+GET        /ws                   controllers.GamesController.ws
+GET         /                                 controllers.GamesController.home
+
 
 # An example controller showing how to use dependency injection
 #GET     /count                      controllers.CountController.count
@@ -19,5 +21,3 @@ GET         /                                 controllers.Application.home()
 
 # Map static resources from the /public folder to the /assets URL path
 
-#Add SignalJ Routes
-#->     /         					signal.Routes

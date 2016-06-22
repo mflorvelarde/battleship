@@ -1,6 +1,7 @@
 package model;
 
 import com.avaje.ebean.Model;
+import com.avaje.ebeaninternal.server.lib.util.Str;
 import org.jetbrains.annotations.Nullable;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class Player extends Model {
     @Id
     private long id;
     public String name;
-    public long facebookId;
+    public String facebookId;
     @OneToMany(mappedBy = "winner")
     public List<Game> gamesWon;
     @OneToMany(mappedBy = "looser")
@@ -22,21 +23,30 @@ public class Player extends Model {
     @JoinColumn(name = "statistics", referencedColumnName = "id")
     public Statistics statistics;
 
-    public static Finder<Long, Player> find = new Finder<Long, Player>(Player.class);
+    public static Finder<Long, Player> find = new Finder<>(Player.class);
 
     @Nullable
-    public static Player findByFacebookId(long facebookId) {
+    public static Player findByFacebookId(String facebookId) {
         final List<Player> players = find.where().eq("facebookId", facebookId).findList();
         if (players.size() > 0) return players.get(0);
         return   null;
     }
 
-
-    public Player(String name, long facebookId) {
+    public Player(String name, String facebookId) {
         this.name = name;
         this.facebookId = facebookId;
-        this.gamesWon = new ArrayList<Game>();
-        this.gamesLost = new ArrayList<Game>();
+        this.gamesWon = new ArrayList<>();
+        this.gamesLost = new ArrayList<>();
+    }
+
+    public static Player findOrCreate(String name, String facebookId) {
+        final Player player = findByFacebookId(facebookId);
+        if (player != null) return player;
+        else {
+            final Player newPlayer = new Player(name, facebookId);
+            newPlayer.save();
+            return newPlayer;
+        }
     }
 
     public long getId() {
@@ -50,5 +60,9 @@ public class Player extends Model {
     public void addWonGame(Game game) {
         this.gamesWon.add(game);
         this.gamesLost.add(game);
+    }
+
+    public String getFacebookId() {
+        return facebookId;
     }
 }

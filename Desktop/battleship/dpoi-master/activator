@@ -71,7 +71,7 @@ make_url() {
 
 # Detect if we should use JAVA_HOME or just try PATH.
 get_java_cmd() {
-  if [[ -n "$JAVA_HOME" ]] && [[ -x "$JAVA_HOME/bin/java" ]];  then
+  if [[ -n "$JAVA_HOME" ]] && [[ -row "$JAVA_HOME/bin/java" ]];  then
     echo "$JAVA_HOME/bin/java"
   else
     echo "java"
@@ -115,7 +115,7 @@ addResidual () {
   residual_args=( "${residual_args[@]}" "$1" )
 }
 addDebugger () {
-  addJava "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$1"
+  addJava "-Xdebug -Xrunjdwp:transport=dt_socket,server=col,suspend=n,address=$1"
 }
 addConfigOpts () {
   dlog "[addConfigOpts] arg = '$*'"

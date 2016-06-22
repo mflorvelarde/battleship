@@ -5,6 +5,8 @@
 
 create table game (
   id                            bigint not null,
+  facebook_id                   varchar(255),
+  current_player_fb_id          varchar(255),
   date                          timestamp,
   gameswon                      bigint,
   gameslost                     bigint,
@@ -15,7 +17,7 @@ create sequence game_seq;
 create table player (
   id                            bigint not null,
   name                          varchar(255),
-  facebook_id                   bigint,
+  facebook_id                   varchar(255),
   constraint pk_player primary key (id)
 );
 create sequence player_seq;
