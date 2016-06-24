@@ -40,8 +40,11 @@ public class GameActor extends AbstractActor {
                     //TODO ver si puedo instanciarlo en el constructor
                     final Game game = createGame(createGame);
                     userPlaying = game.getPlayerBoard().getOwner();
-                    final JsonNode gameCreatedMessage = ResponseFactory.gameCreated(game.getId());
-                    gameBoards.keySet().forEach(actorRef -> actorRef.tell(gameCreatedMessage, self()));
+
+//                    final JsonNode gameCreatedMessage = ResponseFactory.gameCreated(self().path().name());
+//                    gameBoards.keySet().forEach(actorRef -> actorRef.tell(gameCreatedMessage, self()));
+                    final GameMssg.GameCreated gameCreated = new GameMssg.GameCreated(self().path().name());
+                    gameBoards.keySet().forEach(actorRef -> actorRef.tell(gameCreated, self()));
                 })
                 .match(SetShip.class, setShip -> {
                     final GameBoard gameBoard = gameBoards.get(sender());
@@ -58,10 +61,13 @@ public class GameActor extends AbstractActor {
                             final HitResult hitResult = opponentGameBoard.receiveShoot(shoot.row, shoot.col);
 
                             if (!hitResult.name().equals(HitResult.WIN.name())) {
-                                opponentRef.tell(receiveShoot(shoot.row, shoot.col, hitResult), self());
-                                sender().tell(shootResult(shoot.row, shoot.col, hitResult), self());
+                                final GameMssg.ReceiveShoot receiveShoot = new GameMssg.ReceiveShoot(shoot.row, shoot.col, hitResult);
+                                opponentRef.tell(receiveShoot, self());
+                                final GameMssg.ShootResult shootResult = new GameMssg.ShootResult(shoot.row, shoot.col, hitResult);
+                                sender().tell(shootResult, self());
                             } else {
-                                sender().tell(endGame(WIN), self());
+                                final GameMssg.EndGame endGame = new GameMssg.EndGame(WIN);
+                                sender().tell(endGame, self());
                             }
                             playerBoard.annotate(shoot.row, shoot.col, hitResult);
 
@@ -71,7 +77,7 @@ public class GameActor extends AbstractActor {
                     }
                 })
                 .match(GameMssg.LeaveGame.class, leaveGame -> {
-                    final JsonNode endGame = endGame(FinishedGameStatus.OPPONENT_LEFT);
+                    final GameMssg.EndGame endGame = new GameMssg.EndGame(FinishedGameStatus.OPPONENT_LEFT);
                     final String facebookId = leaveGame.facebookId;
                     if (!userPlaying.facebookId.equals(facebookId)) {
                         sender().tell(endGame, self());
@@ -106,7 +112,7 @@ public class GameActor extends AbstractActor {
         if (opponentRef != null) {
             final GameBoard opponentGameBoard = gameBoards.get(opponentRef);
             userPlaying = opponentGameBoard.getOwner();
-            opponentRef.tell(yourTurn(), self());
+            opponentRef.tell(new GameMssg.YourTurn(), self());
         } else log.error("ChangeTurn: opponentRef is null!");
     }
 

@@ -16,7 +16,7 @@ public class GamesActor extends UntypedActor {
 
     private static final String GAME = "game-";
     private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
-
+    //TODO agregar mapa con sesion
     @Override
     public void onReceive(Object message) throws Exception {
         if (message instanceof GameMssg.CreateGame) {
@@ -28,9 +28,9 @@ public class GamesActor extends UntypedActor {
 //                        return context().actorOf(props, gameName);
 //                    }
 //            ).forward(gameCreated, context());
-
-            final String gameName = GAME + createGame.player1.player.toString() + createGame.player2.player.toString();
-            final Props props = Props.create(GameActor.class, gameName);
+            log.debug("CreateGame");
+            final String gameName = GAME + createGame.player1.facebookId + createGame.player2.facebookId;
+            final Props props = Props.create(GameActor.class);
             final ActorRef gameChild = context().actorOf(props, gameName);
             gameChild.forward(createGame, context());
         }

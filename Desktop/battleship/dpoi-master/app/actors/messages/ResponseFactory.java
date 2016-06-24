@@ -13,16 +13,16 @@ public class ResponseFactory {
     private ResponseFactory() {
     }
 
-    public static JsonNode gameCreated(long gameId) {
+    public static JsonNode gameCreated(String gameName) {
         return Json.newObject()
                 .put("type", "gameCreated")
-                .put("gameName", gameId);
+                .put("gameName", gameName);
     }
 
-    public static JsonNode startGame(String playerWhoPlayfacebookId) {
+    public static JsonNode startGame(String playerWhoPlayFacebookId) {
         return Json.newObject()
                 .put("type", "startGame")
-                .put("facebookId", playerWhoPlayfacebookId);
+                .put("facebookId", playerWhoPlayFacebookId);
     }
 
     public static JsonNode receiveShoot(int row, int col, HitResult hitResult) {

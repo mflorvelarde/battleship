@@ -38,6 +38,9 @@
 
   <logger name="actors.PlayerParentActor" level="INFO"/>
   <logger name="actors.PlayerActor" level="INFO"/>
+  <logger name="actors.GameActor" level="INFO"/>
+  <logger name="actors.GamesActor" level="INFO"/>
+  <logger name="actors.WaitingPlayersActor" level="INFO"/>
 
   <root level="WARN">
     <appender-ref ref="ASYNCFILE" />

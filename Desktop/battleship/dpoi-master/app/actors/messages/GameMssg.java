@@ -18,6 +18,13 @@ public class GameMssg {
         public JoinGame(PlayerMssg waitingPlayer) {
             this.waitingPlayer = waitingPlayer;
         }
+
+        @Override
+        public String toString() {
+            return "JoinGame{" +
+                    "waitingPlayer=" + waitingPlayer +
+                    '}';
+        }
     }
 
     public static final class LeaveGame {
@@ -76,14 +83,23 @@ public class GameMssg {
         public int hashCode() {
             return facebookId != null ? facebookId.hashCode() : 0;
         }
+
+        @Override
+        public String toString() {
+            return "PlayerMssg{" +
+                    "player=" + player +
+                    ", name='" + name + '\'' +
+                    ", facebookId='" + facebookId + '\'' +
+                    '}';
+        }
     }
 
     public static final class SetShip {
-        public final int size;
-        public final int[] row, col;
+        public final Integer size;
+        public final Integer[] row, col;
         public final String gameName;
 
-        public SetShip(int[] col, int[] row, int size, String gameName) {
+        public SetShip(Integer[] col, Integer[] row, int size, String gameName) {
             this.col = col;
             this.row = row;
             this.size = size;
@@ -127,6 +143,13 @@ public class GameMssg {
 
         public GameCreated(String gameName) {
             this.gameName = gameName;
+        }
+
+        @Override
+        public String toString() {
+            return "GameCreated{" +
+                    "gameName='" + gameName + '\'' +
+                    '}';
         }
     }
 

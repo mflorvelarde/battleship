@@ -1,60 +1,63 @@
-@(user: String, won: String, lost: String)
+@(request: play.mvc.Http.Request, user: String, won: String, lost: String)
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script src="@routes.Assets.at("javascripts/userInfo.js")"></script>
+    </head>
 
-<head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="@routes.Assets.at("javascripts/userInfo.js")"></script>
-</head>
+    <body data-ws-url="@routes.GamesController.ws.webSocketURL(request)">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <nav class="navbar navbar-default" role="navigation">
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav navbar-right">
+                                <li>
+                                    <h4 id="user-name">:user</h4>
+                                </li>
+                            </ul>
+                        </div>
 
-<body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <nav class="navbar navbar-default" role="navigation">
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav navbar-right">
-                            <li>
-                                <h4 id="user-name">Battleship</h4>
-                            </li>
-                        </ul>
-                    </div>
-
-                </nav>
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="jumbotron">
-                            <h2>Welcome to Battleship!</h2>
+                    </nav>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="jumbotron">
+                                <h2>Welcome to Battleship!</h2>
                                 <p>Start by placing all your battleships on the map</p>
                                 <p> Doubleclick the ships to rotate it</p>
                                 <p>At each turn, click on the grid to locate and destroy your opponent's ships</p>
-                            <p><a class="btn btn-primary btn-large" href="/play">Play</a></p>
+                                <p><button type="button" class="btn btn-default" onclick="joinGame()">Play</button></p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th colspan="2">Statistics</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="success">
-                                    <td>Won games</td>
-                                    <td>8</td>
-                                </tr>
-                                <tr class="danger">
-                                    <td>Lost Games</td>
-                                    <td>2</td>
-                                </tr>
-                                <tr>
-                                    <td>Total Games</td>
-                                    <td>10</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="col-md-4">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">Statistics</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="success">
+                                        <td>Won games</td>
+                                        <td>8</td>
+                                    </tr>
+                                    <tr class="danger">
+                                        <td>Lost Games</td>
+                                        <td>2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Games</td>
+                                        <td>10</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</body>
+    </body>
+</html>

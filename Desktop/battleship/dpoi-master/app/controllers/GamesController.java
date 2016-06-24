@@ -44,18 +44,21 @@ public class GamesController extends Controller{
     private final ActorSystem actorSystem;
     private final Materializer materializer;
     private final ActorRef playerParentActor;
+    private final ActorRef waitingPlayersActor;
 
     @Inject
     public GamesController(ActorSystem actorSystem,
                            Materializer materializer,
+                           @Named("waitingPlayersActor") ActorRef waitingPlayersActor,
                            @Named("playerParentActor") ActorRef playerParentActor) {
+        this.waitingPlayersActor = waitingPlayersActor;
         this.playerParentActor = playerParentActor;
         this.materializer = materializer;
         this.actorSystem = actorSystem;
     }
 
     public Result home() {
-        return ok(home.render(request()));
+        return ok(home.render(request(), session("player"), "", ""));
     }
 
     public WebSocket ws() {

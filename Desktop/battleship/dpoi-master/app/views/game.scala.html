@@ -1,3 +1,4 @@
+@(request: play.mvc.Http.Request)
 <!doctype html>
 <html lang="en">
     <head>
@@ -10,9 +11,8 @@
         <link rel="stylesheet" href="@routes.Assets.at("stylesheets/bootstrap-theme.min.css")">
         <link rel="stylesheet" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
         <script src="@routes.Assets.at("javascripts/data.js")"></script>
-
     </head>
-    <body>
+    <body data-ws-url="@routes.GamesController.ws.webSocketURL(request)">
         <div class="container" id="header-container" >
             <div class="row">
                 <div id="header-navbar" class="col-md-12">
@@ -20,7 +20,7 @@
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <a href="/home">Leave Game</a>
+                                    <button type="button" class="btn btn-default" onclick="leaveGame()">Leave Game</button>
                                 </li>
                             </ul>
                         </div>
@@ -40,7 +40,7 @@
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
                                     <button id="ready-button" type="button" class="btn btn-default"
-                                            onclick="setReadyToPlay(this)">Ready!</button>
+                                    onclick="setReadyToPlay(this)">Ready!</button>
                                 </li>
                             </ul>
                         </div>
@@ -147,6 +147,7 @@
                         <div id="cell-99" class="cell"></div>
                         <div id="cell-100" class="cell"></div>
                     </div>
+
                     <div>
                         <div id="ship-1" class="draggable ui-widget-content ship orient-h length-1" ondblclick="rotateShip(id)">
                     </div>
@@ -169,7 +170,7 @@
                 <div class="col-md-6 board-header">
                     <nav class="navbar navbar-default" role="navigation">
                         <div class="navbar-header">
-                            <h4 id="ready-titles">Your board</h4>
+                            <h4 id="ready-titles">Your opponent</h4>
                         </div>
                     </nav>
                     <div class="board containment-wrapper ">
@@ -278,14 +279,9 @@
                     <div>
 
                         <button type="button" class="btn btn-default" onclick="">Suggest shot</button>
-                        <button type="button" class="btn btn-default" onclick="openWinnningModal()">Sot</button>
                     </div>
                 </div>
             </div>
         </div>
     </body>
 </html>
-
-
-
-

@@ -5,12 +5,12 @@
 # An example controller showing a sample home page
 #GET         /metrics                          controllers.HomeController.metrics()
 GET         /assets/*file                     controllers.Assets.at(path="/public", file)
-GET         /play                             controllers.Application.play()
 GET         /login                            controllers.Application.login()
+GET         /play                             controllers.Application.play()
 POST        /api/authenticate/:user           controllers.PlayerController.authenticate(user: String)
 GET         /api/users/:facebookId            controllers.PlayerController.getUserByFacebookId(facebookId: String )
 GET         /api/users/:id/statisctics        controllers.StatisticsController.getPlayerStattistics(id: String)
-GET        /ws                   controllers.GamesController.ws
+GET         /ws                               controllers.GamesController.ws
 GET         /                                 controllers.GamesController.home
 
 

@@ -1,25 +1,56 @@
 /*window.onload = function {
-    var hub = $.connection.gameHub;
-    $.connection.hub.start().done(function)
-}*/
+ var hub = $.connection.gameHub;
+ $.connection.hub.start().done(function)
+ }*/
 
-var board = [0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0
+var facebookId = 1234;
+var gameName;
+var ws;
+
+var board = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 ];
 
+$(function() {
+    ws = new WebSocket($("body").data("ws-url"));
+    return ws.onmessage = function(event) {
+        var message;
+        message = JSON.parse(event.data);
+        alert(message);
+        switch (message.type) {
+            case "gameCreated":
+                return gameCreated(message);
+            case "shootResult":
+                return shootResult(message);
+            case "receiveShoot":
+                return receiveShot(message);
+            case "endGame":
+                return endGame(message);
+            case "yourTurn":
+                return yourTurn(message);
+            default:
+                return console.log(message);
+        }
+    };
+});
+
+function gameCreated (message) {
+    gameName = message.gameName;
+    alert(gameName);
+}
 
 $(function () {
     $(".draggable").draggable({
         grid: [50, 50], containment: ".containment-wrapper", scroll: false,
-        stop: function() {
+        stop: function () {
             var columna = ( Math.floor(($(this).position().left) / 50) ) + 1;
             var fila = Math.floor(($(this).position().top) / 50);
             var orientation;
@@ -37,23 +68,22 @@ $(function () {
             else if (this.className.match(/(?:^|\s)length-2(?!\S)/)) length = 2;
             else length = 3;
 
-            var cell= (10 * ( fila - 1)) + columna;
+            var cell = (10 * ( fila - 1)) + columna;
 
-            for(i = 1; i <=100; i++) {
-                if(board[i] == id) board[i] = 0;
+            for (i = 1; i <= 100; i++) {
+                if (board[i] == id) board[i] = 0;
             }
 
-            if (verifyCellsAvailability(columna,fila, orientation, length)) {
+            if (verifyCellsAvailability(columna, fila, orientation, length)) {
                 if (document.getElementById(id).className.match(/(?:^|\s)wrong-location(?!\S)/)) {
-                    document.getElementById(id).className = document.getElementById(id).className.replace(/(?:^|\s)wrong-location(?!\S)/g , '' );
+                    document.getElementById(id).className = document.getElementById(id).className.replace(/(?:^|\s)wrong-location(?!\S)/g, '');
                 }
-                locateShip(columna, fila,orientation,length, id);
+                locateShip(columna, fila, orientation, length, id);
             }
             else {
                 document.getElementById(id).className += " wrong-location";
                 alert("Ops! You already have a ship on that position");
             }
-
 
 
         }
@@ -62,8 +92,8 @@ $(function () {
 
 function rotateShip(id) {
     var element = document.getElementById(id);
-    if (element.className.match(/(?:^|\s)orient-v(?!\S)/) ) {
-        document.getElementById(id).className = element.className.replace(/(?:^|\s)orient-v(?!\S)/g , '' );
+    if (element.className.match(/(?:^|\s)orient-v(?!\S)/)) {
+        document.getElementById(id).className = element.className.replace(/(?:^|\s)orient-v(?!\S)/g, '');
     } else {
         document.getElementById(id).className += " orient-v";
     }
@@ -72,24 +102,39 @@ function rotateShip(id) {
 function shoot(element) {
     var fila = ((element.offsetTop) - 20 ) / 50;
     var columna = ((element.offsetLeft - 15 ) / 50 ) + 1;
+    var jsonObj = [];
+    var arrayFinal = {};
+    var shoot = {};
+    var arrayGameName = {};
+    var row = {};
+    var col = {};
+    shoot["type"] = "shoot";
+    shoot["gameName"] = gameName;
+    shoot["row"] = fila;
+    shoot["col"] = columna;
+    arrayFinal[""] = shoot;
+    jsonObj.push(arrayFinal);
+    var jsonFinale = JSON.stringify(shoot);
+    ws.send(jsonFinale);
 }
+
 
 function turnCellToFire(element) {
     element.className += " fired-cell";
     element.disabled = true;
-    $element.prop( "onclick", null );
-    console.log( "onclick property: ", $element[ 0 ].onclick );
+    $element.prop("onclick", null);
+    console.log("onclick property: ", $element[0].onclick);
 }
 
 function turnCellToWater(element) {
     element.className += " water-cell"
 }
 
-function locateShip(x,y,orientation, length, id) {
+function locateShip(x, y, orientation, length, id) {
     var cell = (10 * ( y - 1)) + x;
     if (orientation == "orient-v") {
-        var last = cell + 10 * (length - 1) ;
-        for (var j= cell;j <= last ; j +=10) {
+        var last = cell + 10 * (length - 1);
+        for (var j = cell; j <= last; j += 10) {
             board[j - 1] = id;
         }
     } else {
@@ -99,11 +144,11 @@ function locateShip(x,y,orientation, length, id) {
     }
 }
 
-function verifyCellsAvailability(x,y, orientation, length) {
+function verifyCellsAvailability(x, y, orientation, length) {
     var cell = (10 * ( y - 1)) + x;
     if (orientation == "orient-v") {
         var last = cell + 10 * (length - 1);
-        for (i= cell; i <= last ; i += 10) {
+        for (i = cell; i <= last; i += 10) {
             if (board[i - 1] != 0) return false;
         }
     } else {
@@ -125,12 +170,80 @@ function receiveShot(x, y) {
 function setReadyToPlay(element) {
     element.style.display = 'none';
     var id;
-    document.getElementById("ship-1").className = document.getElementById("ship-1").className.replace(/(?:^|\s)draggable(?!\S)/g , ' ship-fixed' );
-    document.getElementById("player-board").className = document.getElementById("player-board").className.replace(/(?:^|\s)containment-wrapper(?!\S)/g , ' ' );
-    document.getElementById("ship-1").className = document.getElementById("ship-1").className.replace(/(?:^|\s)ui-draggable(?!\S)/g , ' ' );
-    document.getElementById("ship-1").className = document.getElementById("ship-1").className.replace(/(?:^|\s)ui-draggable-handle(?!\S)/g , ' ' );
-     // document.getElementById("ship-1").className += " ship-fixed";
+    $(".draggable").draggable('disable');
+    var locationShip1 = [];
+    var locationShip2 = [];
+    var locationShip3 = [];
+    var locationShip4 = [];
+    var locationShip5 = [];
+    var locationShip6 = [];
+    var locationShip7 = [];
+    var locationShip8 = [];
+    for (var i = 0; i < board.length; i++) {
+        if (board[i] != 0) {
+            if (board[i] == "ship-1") {
+                locationShip1.push(i);
+            }
+            if (board[i] == "ship-2") {
+                locationShip2.push(i);
+            }
+            if (board[i] == "ship-3") {
+                locationShip3.push(i);
+            }
+            if (board[i] == "ship-4") {
+                locationShip4.push(i);
+            }
+            if (board[i] == "ship-5") {
+                locationShip5.push(i);
+            }
+            if (board[i] == "ship-6") {
+                locationShip6.push(i);
+            }
+            if (board[i] == "ship-7") {
+                locationShip7.push(i);
+            }
+            if (board[i] == "ship-8") {
+                locationShip8.push(i);
+            }
+        }
+    }
+    setShipReady(locationShip1);
+    setShipReady(locationShip2);
+    setShipReady(locationShip3);
+    setShipReady(locationShip4);
+    setShipReady(locationShip5);
+    setShipReady(locationShip6);
+    setShipReady(locationShip7);
+    setShipReady(locationShip8);
 }
+
+
+function setShipReady(locationShip) {
+    var shipRow;
+    var shipCol;
+    var arrayRows = [];
+    var arrayCols = [];
+    var jsonObj = [];
+    var arrayFinal = {};
+    var setShip = {};
+
+    for (var j = 0; j < locationShip.length; j++) {
+        shipRow = Math.floor(locationShip[j] / 10) + 1;
+        shipCol = locationShip[j] % 10 + 1;
+        arrayRows.push(shipRow);
+        arrayCols.push(shipCol);
+    }
+    setShip["type"] = "setShip";
+    setShip["gameName"] = gameName;
+    setShip["row"] = arrayRows;
+    setShip["col"] = arrayCols;
+    setShip["len"] = locationShip.length;
+    arrayFinal[""] = setShip;
+    jsonObj.push(arrayFinal);
+    var jsonFinale = JSON.stringify(setShip);
+    ws.send(jsonFinale);
+}
+
 
 function openWinnningModal() {
     alert("Congratulations: you won!");
@@ -139,5 +252,18 @@ function openWinnningModal() {
 
 function openLoosingModal() {
     alert("Ooohh: you lost!");
+    window.location.href = "/";
+}
+function leaveGame(){
+    var jsonObj = [];
+    var leftGame = {};
+    var array = {};
+    array["type"] = "leftGame";
+    array["facebookId"] = facebookId;
+    array["gameName"] = gameName;
+    leftGame[""] = array;
+    jsonObj.push(leftGame);
+    var jsonFinale = JSON.stringify(array);
+    ws.send(jsonFinale);
     window.location.href = "/";
 }
