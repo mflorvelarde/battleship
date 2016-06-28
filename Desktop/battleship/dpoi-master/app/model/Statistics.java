@@ -15,7 +15,7 @@ public class Statistics extends Model {
     @Id
     private long id;
     @OneToOne
-    @JoinColumn(name = "player", referencedColumnName = "id")
+    @JoinColumn(name = "actorRef", referencedColumnName = "id")
     public Player player;
     public int wins;
     public int looses;

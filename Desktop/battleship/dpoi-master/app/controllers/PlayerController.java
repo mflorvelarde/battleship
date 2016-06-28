@@ -1,8 +1,10 @@
 package controllers;
 
 import com.avaje.ebean.Ebean;
+import com.fasterxml.jackson.databind.JsonNode;
 import model.Player;
 import play.db.ebean.Transactional;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.home;
@@ -25,19 +27,26 @@ public class PlayerController extends Controller {
 
     @Transactional
     public Result authenticate(String user) {
-        HashMap<Long, String> userInfo = parseUser(user);
-        String id = userInfo.keySet().iterator().next().toString();
+        final JsonNode userJson = Json.parse(user);
+        final String name = userJson.get("name").textValue();
+        final long fbId = userJson.get("id").asLong();
 
-        if (getUserByFacebookId(id) == null) crateUser(id, userInfo.get(id));
+        Player player = Player.findByFacebookId(fbId);
+        if (player == null) player = createUser(fbId, name);
+        else player = createUser(fbId + 1, "Fake User");
 
-        session("player", id);
+        final String playerId = String.valueOf(player.getId());
+        session("player", playerId);
 
-        return ok(home.render(request(), id, "", ""));
+        System.out.println("Login Successful");
+
+        return ok(home.render(request(), playerId, "", ""));
     }
 
-    private void crateUser(String id, String name) {
-        Player player = new Player(name, id);
+    private Player createUser(long fbId, String name) {
+        Player player = new Player(name, String.valueOf(fbId));
         Ebean.save(player);
+        return player;
     }
 
     private HashMap<Long, String> parseUser(String user) {
@@ -77,9 +86,10 @@ public class PlayerController extends Controller {
         return result;
     }
 
-    public Result getUserByFacebookId(String facebookId) {
-        Player player = Ebean.find(Player.class).where().eq("FACEBOOK_ID", Long.parseLong(facebookId)).findUnique();
+    public Result getUserByFacebookId(long facebookId) {
+        final Player player = Player.findByFacebookId(facebookId);
         if (player == null) return null;
         else return ok(toJson(player));
     }
+
 }

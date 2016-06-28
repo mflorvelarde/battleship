@@ -1,14 +1,9 @@
 import actors.GamesActor;
 import actors.PlayerActor;
 import actors.PlayerParentActor;
-import actors.WaitingPlayersActor;
 import com.google.inject.AbstractModule;
-import java.time.Clock;
 
 import play.libs.akka.AkkaGuiceSupport;
-import services.ApplicationTimer;
-import services.AtomicCounter;
-import services.Counter;
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -32,7 +27,6 @@ public class Module extends AbstractModule implements AkkaGuiceSupport {
         // Set AtomicCounter as the implementation for Counter.
 //        bind(Counter.class).to(AtomicCounter.class);
         bindActor(GamesActor.class, "gamesActor");
-        bindActor(WaitingPlayersActor.class, "waitingPlayersActor");
         bindActor(PlayerParentActor.class, "playerParentActor");
         bindActorFactory(PlayerActor.class, PlayerActor.Factory.class);
     }

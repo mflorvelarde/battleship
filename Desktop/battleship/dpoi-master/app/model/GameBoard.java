@@ -37,13 +37,13 @@ public class GameBoard {
         return owner;
     }
 
-    public void setShip(int size, int[] rows, int[] cols) {
+    public void setShip(int size, Integer[] rows, Integer[] cols) {
         final Ship ship = factoryShip.getShip(size);
         ships.add(ship);
         final int shipId = ship.getId();
         for (final int row : rows) {
             for (final int col : cols) {
-                myBoard[row][col] = shipId;
+                myBoard[row - 1][col - 1] = shipId;
             }
         }
     }

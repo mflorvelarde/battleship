@@ -16,11 +16,11 @@
 //public class GameHub extends Hub<GamePage> {
 //    private final static Map<UUID, Long> connectionsToUsers = new HashMap<>();
 //    private final static GamesController gamesController = new GamesController();
-//    private static final String FACEBOOK_ID = "facebookId";
+//    private static final String FACEBOOK_ID = "playerDBId";
 //
-//    public boolean login(long facebookId) {
-//        if(connectionsToUsers.containsValue(facebookId)) return false;
-//        clients().callerState.put(FACEBOOK_ID, String.valueOf(facebookId));
+//    public boolean login(long playerDBId) {
+//        if(connectionsToUsers.containsValue(playerDBId)) return false;
+//        clients().callerState.put(FACEBOOK_ID, String.valueOf(playerDBId));
 //        connectionsToUsers.putIfAbsent(context().connectionId, Long.valueOf(clients().callerState.get(FACEBOOK_ID)));
 //        return true;
 //    }
@@ -31,16 +31,16 @@
 //        clients().callerState.put(FACEBOOK_ID, "");
 //    }
 //
-//    public long joinGame(long facebookId) {
-//        final long waitingPlayer = gamesController.joinGame(facebookId);
-//        addUserToGame(facebookId, waitingPlayer);
+//    public long joinGame(long playerDBId) {
+//        final long waitingPlayer = gamesController.joinGame(playerDBId);
+//        addUserToGame(playerDBId, waitingPlayer);
 //        return waitingPlayer;
 //    }
 //
-//    private void addUserToGame(long facebookId, long waitingPlayer) {
+//    private void addUserToGame(long playerDBId, long waitingPlayer) {
 //        final String stringGameId = String.valueOf(waitingPlayer);
 //        groups().add(context().connectionId, stringGameId);
-//        clients().othersInGroup(stringGameId).opponentJoinedGame(facebookId);
+//        clients().othersInGroup(stringGameId).opponentJoinedGame(playerDBId);
 //    }
 //
 //    public long startGame(long waitingPlayer) {
@@ -53,8 +53,8 @@
 //        return fbId;
 //    }
 //
-//    private boolean removeUserFromGame(String facebookId) {
-//        final Game removedGame = gamesController.removeUserFromGame(facebookId);
+//    private boolean removeUserFromGame(String playerDBId) {
+//        final Game removedGame = gamesController.removeUserFromGame(playerDBId);
 //        if (removedGame != null) {
 //            clients().othersInGroup(String.valueOf(removedGame.getId())).endGame(OPPONENT_LEFT);
 //            groups().remove(context().connectionId, String.valueOf(removedGame.getId()));
@@ -65,7 +65,7 @@
 //
 //    /**
 //     *
-//     * @param shooterId: player facebookId
+//     * @param shooterId: actorRef playerDBId
 //     * @return hit or not
 //     */
 //    public boolean shoot(int row, int column, long shooterId) {
@@ -74,7 +74,7 @@
 //
 //    /**
 //     *
-//     * @param playerFbId: player FacebookId
+//     * @param playerFbId: actorRef FacebookId
 //     * @param positions: [row][column] squares took up by ship
 //     * @param shipSize: {@link model.ships.ShipType}
 //     * @return set successful

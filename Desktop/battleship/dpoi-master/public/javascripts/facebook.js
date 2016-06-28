@@ -90,7 +90,6 @@ function getUserInfo() {
         xhr.withCredentials = true;
         xhr.open("POST", "http://localhost:9000/api/authenticate/" + text);
         xhr.send();
-
     });
 }
 

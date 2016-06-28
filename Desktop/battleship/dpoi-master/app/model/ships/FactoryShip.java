@@ -10,10 +10,9 @@ public class FactoryShip {
 
     public Ship getShip(int size) {
         switch (size) {
-            case 2: return new Ship(MINESWEEPER, id++);
-            case 3: return new Ship(FRIGATE, id++);
-            case 4: return new Ship(CRUISER, id++);
-            case 5: return new Ship(BATTLESHIP, id++);
+            case 1: return new Ship(MINESWEEPER, id++);
+            case 2: return new Ship(FRIGATE, id++);
+            case 3: return new Ship(CRUISER, id++);
             default: return null;
         }
     }

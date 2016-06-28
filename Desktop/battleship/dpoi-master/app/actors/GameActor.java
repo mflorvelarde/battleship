@@ -5,23 +5,22 @@ import actors.messages.GameMssg.PlayerMssg;
 import actors.messages.GameMssg.SetShip;
 import actors.messages.GameMssg.CreateGame;
 import actors.messages.GameMssg.Shoot;
-import actors.messages.ResponseFactory;
-import akka.actor.AbstractActor;
-import akka.actor.ActorRef;
+import akka.actor.*;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.japi.pf.ReceiveBuilder;
-import com.fasterxml.jackson.databind.JsonNode;
 import model.FinishedGameStatus;
 import model.Game;
 import model.GameBoard;
 import model.Player;
 import model.ships.HitResult;
 import org.jetbrains.annotations.Nullable;
+import scala.concurrent.duration.Duration;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
-import static actors.messages.ResponseFactory.*;
+import static model.FinishedGameStatus.OPPONENT_LEFT;
 import static model.FinishedGameStatus.WIN;
 
 /**
@@ -29,6 +28,8 @@ import static model.FinishedGameStatus.WIN;
  */
 public class GameActor extends AbstractActor {
 
+    private Game game;
+    private Cancellable cancellable;
     private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 
     private final HashMap<ActorRef, GameBoard> gameBoards = new HashMap<>();
@@ -38,7 +39,7 @@ public class GameActor extends AbstractActor {
         receive(ReceiveBuilder
                 .match(CreateGame.class, createGame -> {
                     //TODO ver si puedo instanciarlo en el constructor
-                    final Game game = createGame(createGame);
+                    this.game = createGame(createGame);
                     userPlaying = game.getPlayerBoard().getOwner();
 
 //                    final JsonNode gameCreatedMessage = ResponseFactory.gameCreated(self().path().name());
@@ -57,7 +58,7 @@ public class GameActor extends AbstractActor {
                     ActorRef opponentRef = getOpponentRef();
                     if (opponentRef != null) {
                         if (playerBoard.getOwner().getId() == userPlaying.getId()) {
-                            final GameBoard opponentGameBoard =  gameBoards.get(opponentRef);
+                            final GameBoard opponentGameBoard = gameBoards.get(opponentRef);
                             final HitResult hitResult = opponentGameBoard.receiveShoot(shoot.row, shoot.col);
 
                             if (!hitResult.name().equals(HitResult.WIN.name())) {
@@ -68,6 +69,7 @@ public class GameActor extends AbstractActor {
                             } else {
                                 final GameMssg.EndGame endGame = new GameMssg.EndGame(WIN);
                                 sender().tell(endGame, self());
+                                getOpponentRef().tell(new GameMssg.EndGame(FinishedGameStatus.LOOSE), self());
                             }
                             playerBoard.annotate(shoot.row, shoot.col, hitResult);
 
@@ -77,33 +79,58 @@ public class GameActor extends AbstractActor {
                     }
                 })
                 .match(GameMssg.LeaveGame.class, leaveGame -> {
-                    final GameMssg.EndGame endGame = new GameMssg.EndGame(FinishedGameStatus.OPPONENT_LEFT);
-                    final String facebookId = leaveGame.facebookId;
-                    if (!userPlaying.facebookId.equals(facebookId)) {
-                        sender().tell(endGame, self());
-                    } else {
-                        final ActorRef opponentRef = getOpponentRef();
-                        if (opponentRef != null)
-                            opponentRef.tell(endGame, self());
-                        else log.error("LeaveGame: opponentRef is null!");
+                    final GameMssg.EndGame endGame = new GameMssg.EndGame(OPPONENT_LEFT);
+
+                    final ActorRef opponentRef = getOpponentRef();
+                    if (opponentRef != null)
+                        opponentRef.tell(endGame, self());
+                    else log.error("LeaveGame: opponentRef is null!");
+                    saveGameState();
+                    close();
+                })
+                .match(GameMssg.PlayerDisconnected.class, playerDisconnected -> {
+                    final ActorRef opponentRef = getOpponentRef();
+                    if (opponentRef != null) {
+                        final ActorSystem system = context().system();
+                        cancellable = system.scheduler().scheduleOnce(Duration.create(15, TimeUnit.SECONDS),
+                                self(), new GameMssg.LeaveGame(null, null), system.dispatcher(), null);
+                    }
+                })
+                .match(GameMssg.ContinueGame.class, continueGame -> {
+                    final PlayerMssg player = continueGame.player1;
+                    if (cancellable != null) {
+                        if (cancellable.cancel()) {
+                            final GameBoard gameBoard = gameBoards.remove(continueGame.oldActorRef);
+                            gameBoards.put(player.actorRef, gameBoard);
+                            final ActorRef opponentRef = getOpponentRef();
+                            if (opponentRef != null) {
+                                opponentRef.tell(new GameMssg.ContinueGame(null, null), self());
+                            } else log.info("Opponent Ref is Null");
+
+                        }
                     }
                 })
                 .build());
+    }
+
+    public void close() {
+        context().parent().tell(new GameMssg.EndGame(null) , self());
+        self().tell(PoisonPill.getInstance(), self());
     }
 
     private Game createGame(CreateGame createGame) {
         final PlayerMssg playerActor1 = createGame.player1;
         final PlayerMssg playerActor2 = createGame.player2;
 
-        final Player player1 = Player.findOrCreate(playerActor1.name, playerActor1.facebookId);
-        final Player player2 = Player.findOrCreate(playerActor2.name, playerActor2.facebookId);
+        final Player player1 = Player.find.byId(playerActor1.playerDBId);
+        final Player player2 = Player.find.byId(playerActor2.playerDBId);
         final Game game = new Game(player1, player2);
         game.save();
 
         final GameBoard gameBoard1 = game.getPlayerGameBoard(player1);
         final GameBoard gameBoard2 = game.getPlayerGameBoard(player2);
-        gameBoards.put(playerActor1.player, gameBoard1);
-        gameBoards.put(playerActor2.player, gameBoard2);
+        gameBoards.put(playerActor1.actorRef, gameBoard1);
+        gameBoards.put(playerActor2.actorRef, gameBoard2);
         return game;
     }
 
@@ -125,5 +152,9 @@ public class GameActor extends AbstractActor {
             }
         }
         return null;
+    }
+
+    private void saveGameState() {
+        game.save();
     }
 }

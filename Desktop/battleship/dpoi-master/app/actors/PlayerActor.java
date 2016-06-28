@@ -1,7 +1,6 @@
 package actors;
 
 import actors.messages.GameMssg;
-import actors.messages.GameMssg.JoinGame;
 import actors.messages.ResponseFactory;
 import akka.actor.*;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -12,26 +11,25 @@ import play.Configuration;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static actors.messages.ResponseFactory.endGame;
-import static actors.messages.ResponseFactory.receiveShoot;
-import static actors.messages.ResponseFactory.shootResult;
+import static actors.messages.ResponseFactory.*;
+import static play.mvc.Controller.session;
 
 /**
  * Created by tomasnajun on 15/06/16.
  */
 public class PlayerActor extends UntypedActor{
     private final ActorRef out;
-    private final ActorRef waitingPlayersActor;
     private final ActorRef gamesActor;
     private Configuration configuration;
+    private final long playerId;
 
     @Inject
     public PlayerActor(@Assisted ActorRef out,
-                       @Named("waitingPlayersActor") ActorRef waitingPlayersActor,
+                       @Assisted long playerId,
                        @Named("gamesActor") ActorRef gamesActor,
                        Configuration configuration) {
         this.out = out;
-        this.waitingPlayersActor = waitingPlayersActor;
+        this.playerId = playerId;
         this.gamesActor = gamesActor;
         this.configuration = configuration;
     }
@@ -74,6 +72,11 @@ public class PlayerActor extends UntypedActor{
             out.tell(endGameMessage, self());
         }
 
+        if (msg instanceof GameMssg.ContinueGame) {
+            final JsonNode continueGame = continueGame();
+            out.tell(continueGame, self());
+        }
+
         if (msg instanceof JsonNode) {
             final JsonNode json = (JsonNode) msg;
             final String type = json.get("type").textValue();
@@ -82,10 +85,8 @@ public class PlayerActor extends UntypedActor{
 
             switch (type) {
                 case "joinGame":
-                    final String facebookId = json.get("facebookId").textValue();
-                    final String name = json.get("name").textValue();
-                    final JoinGame joinGame = new JoinGame(new GameMssg.PlayerMssg(self(), name, facebookId));
-                    waitingPlayersActor.tell(joinGame, self());
+                    final GameMssg.JoinGame joinGame = new GameMssg.JoinGame(new GameMssg.PlayerMssg(self(), playerId));
+                    gamesActor.tell(joinGame, self());
                     System.out.println(joinGame);
                     break;
                 case "setShip":
@@ -95,7 +96,7 @@ public class PlayerActor extends UntypedActor{
                     final String gameName = json.get("gameName").textValue();
                     final GameMssg.SetShip setShip = new GameMssg.SetShip(cols, rows, len, gameName);
                     gamesActor.tell(setShip, self());
-//                    System.out.println("setShip = " + setShip);
+                    System.out.println("setShip = " + setShip);
                     break;
                 case "shoot":
                     final int row = json.get("row").asInt();
@@ -107,7 +108,7 @@ public class PlayerActor extends UntypedActor{
                     break;
                 case "leaveGame":
                     final String leaveGameName = json.get("gameName").textValue();
-                    final String fbId = json.get("facebookId").textValue();
+                    final String fbId = json.get("playerDBId").textValue();
                     final GameMssg.LeaveGame leaveGame = new GameMssg.LeaveGame(leaveGameName, fbId);
                     gamesActor.tell(leaveGame, self());
                     System.out.println("leaveGame = " + leaveGame);
@@ -120,9 +121,7 @@ public class PlayerActor extends UntypedActor{
         self().tell(PoisonPill.getInstance(), self());
     }
 
-
-
     public interface Factory {
-        Actor create(ActorRef out);
+        Actor create(ActorRef out, long playerId);
     }
 }

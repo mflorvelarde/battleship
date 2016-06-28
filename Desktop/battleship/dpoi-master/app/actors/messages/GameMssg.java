@@ -12,6 +12,9 @@ import java.util.Optional;
  */
 public class GameMssg {
 
+    private GameMssg() {
+    }
+
     public static final class JoinGame {
         public final PlayerMssg waitingPlayer;
 
@@ -42,7 +45,7 @@ public class GameMssg {
         public String toString() {
             return "LeaveGame{" +
                     "gameName='" + gameName + '\'' +
-                    ", facebookId='" + facebookId + '\'' +
+                    ", playerDBId='" + facebookId + '\'' +
                     '}';
         }
     }
@@ -57,15 +60,23 @@ public class GameMssg {
         }
     }
 
-    public static final class PlayerMssg {
-        public final ActorRef player;
-        public final String name;
-        public final String facebookId;
+    public static final class ContinueGame {
+        public final PlayerMssg player1;
+        public final ActorRef oldActorRef;
 
-        public PlayerMssg(ActorRef player, String name, String facebookId) {
-            this.player = player;
-            this.name = name;
-            this.facebookId = facebookId;
+        public ContinueGame(PlayerMssg player1, ActorRef oldActorRef) {
+            this.player1 = player1;
+            this.oldActorRef = oldActorRef;
+        }
+    }
+
+    public static final class PlayerMssg {
+        public final ActorRef actorRef;
+        public final long playerDBId;
+
+        public PlayerMssg(ActorRef actorRef, long playerDBId) {
+            this.actorRef = actorRef;
+            this.playerDBId = playerDBId;
         }
 
         @Override
@@ -75,21 +86,19 @@ public class GameMssg {
 
             final PlayerMssg that = (PlayerMssg) o;
 
-            return facebookId != null ? facebookId.equals(that.facebookId) : that.facebookId == null;
-
+            return playerDBId == that.playerDBId;
         }
 
         @Override
         public int hashCode() {
-            return facebookId != null ? facebookId.hashCode() : 0;
+            return (int) (playerDBId ^ (playerDBId >>> 32));
         }
 
         @Override
         public String toString() {
             return "PlayerMssg{" +
-                    "player=" + player +
-                    ", name='" + name + '\'' +
-                    ", facebookId='" + facebookId + '\'' +
+                    "actorRef=" + actorRef +
+                    ", playerDBId='" + playerDBId + '\'' +
                     '}';
         }
     }
@@ -185,5 +194,8 @@ public class GameMssg {
         public EndGame(FinishedGameStatus status) {
             this.status = status;
         }
+    }
+
+    public static final class PlayerDisconnected {
     }
 }

@@ -22,7 +22,7 @@ public class ResponseFactory {
     public static JsonNode startGame(String playerWhoPlayFacebookId) {
         return Json.newObject()
                 .put("type", "startGame")
-                .put("facebookId", playerWhoPlayFacebookId);
+                .put("playerDBId", playerWhoPlayFacebookId);
     }
 
     public static JsonNode receiveShoot(int row, int col, HitResult hitResult) {
@@ -50,5 +50,10 @@ public class ResponseFactory {
         return Json.newObject()
                 .put("type", "endGame")
                 .put("status", finishedGameStatus.name().toLowerCase());
+    }
+
+    public static JsonNode continueGame() {
+        return Json.newObject()
+                .put("type", "continueGame");
     }
 }

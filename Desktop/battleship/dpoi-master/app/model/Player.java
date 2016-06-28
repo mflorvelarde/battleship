@@ -26,7 +26,7 @@ public class Player extends Model {
     public static Finder<Long, Player> find = new Finder<>(Player.class);
 
     @Nullable
-    public static Player findByFacebookId(String facebookId) {
+    public static Player findByFacebookId(long facebookId) {
         final List<Player> players = find.where().eq("facebookId", facebookId).findList();
         if (players.size() > 0) return players.get(0);
         return   null;
@@ -37,16 +37,6 @@ public class Player extends Model {
         this.facebookId = facebookId;
         this.gamesWon = new ArrayList<>();
         this.gamesLost = new ArrayList<>();
-    }
-
-    public static Player findOrCreate(String name, String facebookId) {
-        final Player player = findByFacebookId(facebookId);
-        if (player != null) return player;
-        else {
-            final Player newPlayer = new Player(name, facebookId);
-            newPlayer.save();
-            return newPlayer;
-        }
     }
 
     public long getId() {

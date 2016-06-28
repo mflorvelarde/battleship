@@ -2,6 +2,7 @@ package controllers;
 
 import play.db.ebean.Transactional;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.Result;
 import views.html.game;
 import views.html.home;

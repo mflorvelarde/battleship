@@ -10,10 +10,7 @@ import akka.stream.Materializer;
 import akka.stream.OverflowStrategy;
 import akka.stream.javadsl.*;
 import com.fasterxml.jackson.databind.JsonNode;
-import model.Game;
-import model.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import play.libs.F;
@@ -24,12 +21,10 @@ import views.html.home;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import static akka.pattern.Patterns.ask;
-import static model.Player.findByFacebookId;
 
 /**
  * Created by tomasnajun on 12/06/16.
@@ -39,19 +34,17 @@ public class GamesController extends Controller{
 
     private Logger logger = org.slf4j.LoggerFactory.getLogger("controllers.GamesController");
 
-    private final static Map<Game, Set<String>> games = new HashMap<>();
-    private final static Map<Game, Set<String>> waitingGames = new HashMap<>();
     private final ActorSystem actorSystem;
     private final Materializer materializer;
     private final ActorRef playerParentActor;
-    private final ActorRef waitingPlayersActor;
+    private final ActorRef gamesActor;
 
     @Inject
     public GamesController(ActorSystem actorSystem,
                            Materializer materializer,
-                           @Named("waitingPlayersActor") ActorRef waitingPlayersActor,
+                           @Named("gamesActor") ActorRef gamesActor,
                            @Named("playerParentActor") ActorRef playerParentActor) {
-        this.waitingPlayersActor = waitingPlayersActor;
+        this.gamesActor = gamesActor;
         this.playerParentActor = playerParentActor;
         this.materializer = materializer;
         this.actorSystem = actorSystem;
@@ -99,8 +92,10 @@ public class GamesController extends Controller{
     public CompletionStage<ActorRef> createUserActor(String id, ActorRef webSocketOut) {
         // Use guice assisted injection to instantiate and configure the child actor.
         long timeoutMillis = 100L;
+        final String playerId = session("player");
+        System.out.println("playerId = " + playerId);
         return FutureConverters.toJava(
-                ask(playerParentActor, new PlayerParentActor.Create(id, webSocketOut), timeoutMillis)
+                ask(playerParentActor, new PlayerParentActor.Create(id, webSocketOut, Long.valueOf(playerId)), timeoutMillis)
         ).thenApply(stageObj -> (ActorRef) stageObj);
     }
 
@@ -118,8 +113,7 @@ public class GamesController extends Controller{
 
         // Connect the source and sink into a flow, telling it to keep the materialized values,
         // and then kicks the flow into existence.
-        final Pair<ActorRef, Publisher<JsonNode>> pair = source.toMat(sink, Keep.both()).run(materializer);
-        return pair;
+        return source.toMat(sink, Keep.both()).run(materializer);
     }
 
     public F.Either<Result, Flow<JsonNode, JsonNode, ?>> logException(Throwable throwable) {
@@ -144,7 +138,8 @@ public class GamesController extends Controller{
         return flow.watchTermination((ignore, termination) -> {
             termination.whenComplete((done, throwable) -> {
                 logger.info("Terminating actor {}", userActor);
-//                stocksActor.tell(new Stock.Unwatch(null), userActor);
+                //TODO arreglar
+//                gamesActor.tell(new GameMssg.PlayerDisconnected(), userActor);
                 actorSystem.stop(userActor);
             });
 
@@ -178,95 +173,4 @@ public class GamesController extends Controller{
         return origin.contains("localhost:9000") || origin.contains("localhost:19001");
     }
 
-    public long joinGame(String facebookId) {
-        final Iterator<Map.Entry<Game, Set<String>>> iterator = waitingGames.entrySet().iterator();
-        final long gameId;
-        if (iterator.hasNext()) {
-            gameId = joinToAWaitingGame(facebookId, iterator.next());
-        } else {
-            gameId = joinToANewGame(facebookId);
-        }
-        return gameId;
-    }
-
-    private long joinToANewGame(String facebookId) {
-        final Player player = findByFacebookId(facebookId);
-        final Game game = new Game(player);
-        game.setCurrentPlayerFbId(facebookId);
-        game.save();
-        final HashSet<String> players = new HashSet<>();
-        players.add(facebookId);
-        waitingGames.put(game, players);
-        return  game.getId();
-    }
-
-    private long joinToAWaitingGame(String facebookId, Map.Entry<Game, Set<String>> gameSetEntry) {
-        final Game game = gameSetEntry.getKey();
-        game.setPlayer2(findByFacebookId(facebookId));
-        game.update();
-        final Set<String> players = gameSetEntry.getValue();
-        players.add(facebookId);
-        games.put(game, players);
-        waitingGames.remove(game);
-        return game.getId();
-    }
-
-    @Nullable public Game removeUserFromGame(String facebookId) {
-        Game removedGame = null;
-        for(Game key : games.keySet()) {
-            if(games.get(key).remove(facebookId)) {
-                removedGame = key;
-                break;
-            }
-        }
-        return removedGame;
-    }
-
-    /**
-     *
-     * @param shooterId: player facebookId
-     * @return hit or not
-     */
-    public boolean shoot(int row, int column, String shooterId) {
-        final Player player = Player.findByFacebookId(shooterId);
-        final Game game = getGameFromFbId(shooterId);
-        if (game != null) {
-
-        }
-        return false;
-    }
-
-    /**
-     *
-     * @param playerFbId: player FacebookId
-     * @param positions: [row][column] squares took up by ship
-     * @param shipSize: {@link model.ships.ShipType}
-     * @return set successful
-     */
-    public boolean setShip(long playerFbId, int[][] positions, int shipSize) {
-        System.out.println("playerFbId = [" + playerFbId + "], positions = [" + Arrays.deepToString(positions) + "], shipSize = [" + shipSize + "]");
-        return false;
-    }
-
-    /**
-     *
-     * @param gameId
-     * @return User Fb Id
-     */
-    public String startGame(long gameId) {
-        final Game game = Game.finder.byId(gameId);
-        //TODO guardar boards del game
-        if (game != null) return game.getCurrentPlayerFbId();
-        return "";
-    }
-
-    @Nullable
-    private Game getGameFromFbId(String facebookId) {
-        for (final Game game : games.keySet()) {
-            if (games.get(game).contains(facebookId)) {
-                return game;
-            }
-        }
-        return null;
-    }
 }

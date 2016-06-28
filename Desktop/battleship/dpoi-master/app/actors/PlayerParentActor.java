@@ -13,10 +13,12 @@ public class PlayerParentActor extends UntypedActor implements InjectedActorSupp
     public static class Create {
         private String id;
         private ActorRef out;
+        private long playerId;
 
-        public Create(String id, ActorRef out) {
+        public Create(String id, ActorRef out, long playerId) {
             this.id = id;
             this.out = out;
+            this.playerId = playerId;
         }
     }
 
@@ -31,7 +33,7 @@ public class PlayerParentActor extends UntypedActor implements InjectedActorSupp
     public void onReceive(Object message) throws Exception {
         if (message instanceof PlayerParentActor.Create) {
             PlayerParentActor.Create create = (PlayerParentActor.Create) message;
-            ActorRef child = injectedChild(() -> childFactory.create(create.out), "playerActor-" + create.id);
+            ActorRef child = injectedChild(() -> childFactory.create(create.out, create.playerId), "playerActor-" + create.id);
             sender().tell(child, self());
         }
     }

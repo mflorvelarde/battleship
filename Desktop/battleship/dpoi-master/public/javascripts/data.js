@@ -21,10 +21,11 @@ var board = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 
 $(function() {
     ws = new WebSocket($("body").data("ws-url"));
-    return ws.onmessage = function(event) {
+    // joinGame();
+    ws.onmessage = function(event) {
         var message;
         message = JSON.parse(event.data);
-        alert(message);
+        console.log(message);
         switch (message.type) {
             case "gameCreated":
                 return gameCreated(message);
@@ -35,16 +36,29 @@ $(function() {
             case "endGame":
                 return endGame(message);
             case "yourTurn":
+                console.log("YourTurn");
                 return yourTurn(message);
             default:
                 return console.log(message);
         }
     };
+    ws.onopen = function () {
+        joinGame();
+    }
 });
 
 function gameCreated (message) {
     gameName = message.gameName;
     alert(gameName);
+}
+
+function joinGame () {
+    var array = {};
+    array["type"] = "joinGame";
+    array["facebookId"] = facebookId;
+    array["name"] = "Test";
+    var jsonFinale = JSON.stringify(array);
+    ws.send(jsonFinale);
 }
 
 $(function () {
@@ -53,6 +67,8 @@ $(function () {
         stop: function () {
             var columna = ( Math.floor(($(this).position().left) / 50) ) + 1;
             var fila = Math.floor(($(this).position().top) / 50);
+            console.log("columna: " + columna);
+            console.log("fila: " + fila);
             var orientation;
             var length;
             var id = this.getAttribute("id");
@@ -70,7 +86,7 @@ $(function () {
 
             var cell = (10 * ( fila - 1)) + columna;
 
-            for (i = 1; i <= 100; i++) {
+            for (var i = 1; i <= 100; i++) {
                 if (board[i] == id) board[i] = 0;
             }
 
@@ -219,6 +235,7 @@ function setReadyToPlay(element) {
 
 
 function setShipReady(locationShip) {
+    if (locationShip.length === 0) return;
     var shipRow;
     var shipCol;
     var arrayRows = [];
