@@ -1,11 +1,12 @@
-/*window.onload = function {
- var hub = $.connection.gameHub;
- $.connection.hub.start().done(function)
- }*/
+window.onload = function() {
+ alert("Waiting for an oponent to join. You can locate your ships");
+ document.getElementById("ready-button").style.display = 'none';
+};
 
 var facebookId = 1234;
 var gameName;
 var ws;
+var currentCell;
 
 var board = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -48,9 +49,45 @@ $(function() {
 });
 
 function gameCreated (message) {
-    gameName = message.gameName;
-    alert(gameName);
+    this.gameName = message.gameName;
+    alert("Your opponent joined. Let's play!");
+    document.getElementById("ready-button").style.display = 'block';
 }
+
+function yourTurn(message) {
+/*    document.getElementById("player-header").style.background = "#87CEEB !important";
+    document.getElementById("opponent-header").style.background = "#4169E1 !important";*/
+    document.getElementById("player-header").className += " active-player";
+    if (document.getElementById("opponent-header").className.match(/(?:^|\s)active-player(?!\S)/)) {
+        document.getElementById("opponent-header").className = document.getElementById("opponent-header").className.replace(/(?:^|\s)active-player(?!\S)/g, ' ');
+    }
+
+    alert("It's your turn to play");
+
+    var elements = document.getElementsByClassName("active-cell");
+    for(var i =0 ;  i < elements.length; i++) {
+        elements[i].setAttribute("onclick", "shoot(this)");
+   }
+}
+
+function shootResult(message) {
+    var rowResult = message.row;
+    var colResult = message.col;
+    var result = message.result;
+
+    if(result == "sink") {
+        turnCellToFire(currentCell);
+    } else if(result == "hit") {
+        turnCellToFire(currentCell);
+    } else {
+        turnCellToWater(currentCell);
+    }
+}
+
+function endGame(message) {
+    alert(message);
+}
+
 
 function joinGame () {
     var array = {};
@@ -109,13 +146,14 @@ $(function () {
 function rotateShip(id) {
     var element = document.getElementById(id);
     if (element.className.match(/(?:^|\s)orient-v(?!\S)/)) {
-        document.getElementById(id).className = element.className.replace(/(?:^|\s)orient-v(?!\S)/g, '');
+        document.getElementById(id).className = element.className.replace(/(?:^|\s)orient-v(?!\S)/g, ' ');
     } else {
         document.getElementById(id).className += " orient-v";
     }
 }
 
 function shoot(element) {
+    this.currentCell = element;
     var fila = ((element.offsetTop) - 20 ) / 50;
     var columna = ((element.offsetLeft - 15 ) / 50 ) + 1;
     var jsonObj = [];
@@ -132,14 +170,28 @@ function shoot(element) {
     jsonObj.push(arrayFinal);
     var jsonFinale = JSON.stringify(shoot);
     ws.send(jsonFinale);
+
+    element.removeAttribute("onclick");
+    element.className = element.className.replace(/(?:^|\s)active-cell(?!\S)/g, ' ');
+
+    var elements = document.getElementsByClassName("active-cell");
+    for(var i =0 ;  i < elements.length; i++) {
+        elements[i].removeAttribute("onclick")
+    }
+
+//    document.getElementById("player-header").style.background =  '#e7e7e7';
+
+    document.getElementById("opponent-header").className += " active-player";
+    document.getElementById("player-header").className = document.getElementById("opponent-header").className.replace(/(?:^|\s)active-player(?!\S)/g, ' ');
+
 }
 
 
 function turnCellToFire(element) {
     element.className += " fired-cell";
-    element.disabled = true;
-    $element.prop("onclick", null);
-    console.log("onclick property: ", $element[0].onclick);
+/*    element.disabled = true;
+    element.prop("onclick", null);
+    console.log("onclick property: ", $element[0].onclick);*/
 }
 
 function turnCellToWater(element) {
@@ -175,7 +227,9 @@ function verifyCellsAvailability(x, y, orientation, length) {
     return true;
 }
 
-function receiveShot(x, y) {
+function receiveShot(message) {
+    var x = message.col;
+    var y = message.row;
     var cellNumber = (10 * ( y - 1)) + x;
     var cellId = "cell-" + cellNumber.toString();
     if (board[cellNumber - 1] == 0) document.getElementById(cellId).className += " water-cell";

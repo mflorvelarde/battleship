@@ -17,6 +17,7 @@ import play.libs.F;
 import play.mvc.*;
 import scala.compat.java8.FutureConverters;
 import views.html.home;
+import views.html.login;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -51,7 +52,13 @@ public class GamesController extends Controller{
     }
 
     public Result home() {
-        return ok(home.render(request(), session("player"), "", ""));
+        String player = session("player");
+        if ( player == null) return forbidden(login.render());
+        else {
+            session("player", player);
+            return ok(home.render(request(), player, "", ""));//TODO le tengo q pasar vacio??
+        }
+        //return ok(home.render(request(), session("player"), "", ""));
     }
 
     public WebSocket ws() {

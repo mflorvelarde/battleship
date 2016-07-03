@@ -16,7 +16,7 @@
         <div class="container" id="header-container" >
             <div class="row">
                 <div id="header-navbar" class="col-md-12">
-                    <nav id="game navbar" class="navbar navbar-default" role="navigation" >
+                    <nav id="game-navbar" class="navbar navbar-default" role="navigation" >
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
@@ -31,7 +31,7 @@
         <div class="container" id="game-container">
             <div class="row">
                 <div class="col-md-6 board-header">
-                    <nav class="navbar navbar-default" role="navigation">
+                    <nav id="player-header" class="navbar navbar-default " role="navigation">
                         <div class="navbar-header">
                             <h4 id="ready-titles">Your board</h4>
                         </div>
@@ -168,112 +168,113 @@
                     </div>
                 </div>
                 <div class="col-md-6 board-header">
-                    <nav class="navbar navbar-default" role="navigation">
+                    <nav id="opponent-header" class="navbar navbar-default" role="navigation">
                         <div class="navbar-header">
                             <h4 id="ready-titles">Your opponent</h4>
                         </div>
                     </nav>
                     <div class="board containment-wrapper ">
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
-                        <div class="cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+                        <div class="cell active-cell" onclick="shoot(this)"></div>
+
                     </div>
 
                     <div>
