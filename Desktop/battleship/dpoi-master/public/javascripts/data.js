@@ -36,7 +36,6 @@ $(function() {
             case "endGame":
                 return endGame(message);
             case "yourTurn":
-                console.log("YourTurn");
                 return yourTurn(message);
             default:
                 return console.log(message);
@@ -275,8 +274,7 @@ function leaveGame(){
     var jsonObj = [];
     var leftGame = {};
     var array = {};
-    array["type"] = "leftGame";
-    array["facebookId"] = facebookId;
+    array["type"] = "leaveGame";
     array["gameName"] = gameName;
     leftGame[""] = array;
     jsonObj.push(leftGame);

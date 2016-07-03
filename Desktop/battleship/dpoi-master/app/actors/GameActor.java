@@ -31,6 +31,7 @@ public class GameActor extends AbstractActor {
     private Game game;
     private Cancellable cancellable;
     private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
+    private HashSet<String> playerReadyToPlay = new HashSet<>();
 
     private final HashMap<ActorRef, GameBoard> gameBoards = new HashMap<>();
     private Player userPlaying;
@@ -42,16 +43,12 @@ public class GameActor extends AbstractActor {
                     this.game = createGame(createGame);
                     userPlaying = game.getPlayerBoard().getOwner();
 
-//                    final JsonNode gameCreatedMessage = ResponseFactory.gameCreated(self().path().name());
-//                    gameBoards.keySet().forEach(actorRef -> actorRef.tell(gameCreatedMessage, self()));
                     final GameMssg.GameCreated gameCreated = new GameMssg.GameCreated(self().path().name());
                     gameBoards.keySet().forEach(actorRef -> actorRef.tell(gameCreated, self()));
                 })
                 .match(SetShip.class, setShip -> {
                     final GameBoard gameBoard = gameBoards.get(sender());
                     gameBoard.setShip(setShip.size, setShip.row, setShip.col);
-                    changeTurn();
-                    //TODO que ambos jugadores puedan setear los barcos al mismo tiempo
                 })
                 .match(Shoot.class, shoot -> {
                     final GameBoard playerBoard = gameBoards.get(sender());
@@ -90,10 +87,11 @@ public class GameActor extends AbstractActor {
                 })
                 .match(GameMssg.PlayerDisconnected.class, playerDisconnected -> {
                     final ActorRef opponentRef = getOpponentRef();
+                    //TODO avisar que el otro jugador se desconecto que espere un ratito
                     if (opponentRef != null) {
                         final ActorSystem system = context().system();
                         cancellable = system.scheduler().scheduleOnce(Duration.create(15, TimeUnit.SECONDS),
-                                self(), new GameMssg.LeaveGame(null, null), system.dispatcher(), null);
+                                self(), new GameMssg.LeaveGame(null), system.dispatcher(), null);
                     }
                 })
                 .match(GameMssg.ContinueGame.class, continueGame -> {
@@ -108,6 +106,12 @@ public class GameActor extends AbstractActor {
                             } else log.info("Opponent Ref is Null");
 
                         }
+                    }
+                })
+                .match(GameMssg.Ready.class, ready -> {
+                    playerReadyToPlay.add(sender().path().name());
+                    if (playerReadyToPlay.size() > 1 && userPlaying == null) {
+                        changeTurn();
                     }
                 })
                 .build());
