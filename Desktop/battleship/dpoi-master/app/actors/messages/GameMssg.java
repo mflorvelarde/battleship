@@ -32,11 +32,9 @@ public class GameMssg {
 
     public static final class LeaveGame {
         public final String gameName;
-        public final String facebookId;
 
-        public LeaveGame(String gameName, String facebookId) {
+        public LeaveGame(String gameName) {
             this.gameName = gameName;
-            this.facebookId = facebookId;
         }
 
         public Optional<String> gameName() { return Optional.of(gameName);}
@@ -45,7 +43,6 @@ public class GameMssg {
         public String toString() {
             return "LeaveGame{" +
                     "gameName='" + gameName + '\'' +
-                    ", playerDBId='" + facebookId + '\'' +
                     '}';
         }
     }
@@ -197,5 +194,13 @@ public class GameMssg {
     }
 
     public static final class PlayerDisconnected {
+    }
+
+    public static final class Ready {
+        public final String gameName;
+
+        public Ready(String gameName) {
+            this.gameName = gameName;
+        }
     }
 }

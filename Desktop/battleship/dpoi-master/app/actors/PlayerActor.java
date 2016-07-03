@@ -80,7 +80,7 @@ public class PlayerActor extends UntypedActor{
         if (msg instanceof JsonNode) {
             final JsonNode json = (JsonNode) msg;
             final String type = json.get("type").textValue();
-
+            final String gameName = json.get("gameName").textValue();
             final ObjectMapper objectMapper = new ObjectMapper();
 
             switch (type) {
@@ -93,7 +93,6 @@ public class PlayerActor extends UntypedActor{
                     Integer[] rows = objectMapper.readValue(json.get("row").toString(), Integer[].class);
                     Integer[] cols = objectMapper.readValue(json.get("col").toString(), Integer[].class);
                     final int len = json.get("len").asInt();
-                    final String gameName = json.get("gameName").textValue();
                     final GameMssg.SetShip setShip = new GameMssg.SetShip(cols, rows, len, gameName);
                     gamesActor.tell(setShip, self());
                     System.out.println("setShip = " + setShip);
@@ -101,17 +100,19 @@ public class PlayerActor extends UntypedActor{
                 case "shoot":
                     final int row = json.get("row").asInt();
                     final int col = json.get("col").asInt();
-                    final String shootGameName = json.get("gameName").textValue();
-                    final GameMssg.Shoot shoot = new GameMssg.Shoot(shootGameName, row, col);
+                    final GameMssg.Shoot shoot = new GameMssg.Shoot(gameName, row, col);
                     gamesActor.tell(shoot, self());
                     System.out.println("shoot = " + shoot);
                     break;
                 case "leaveGame":
-                    final String leaveGameName = json.get("gameName").textValue();
-                    final String fbId = json.get("playerDBId").textValue();
-                    final GameMssg.LeaveGame leaveGame = new GameMssg.LeaveGame(leaveGameName, fbId);
+                    final GameMssg.LeaveGame leaveGame = new GameMssg.LeaveGame(gameName);
                     gamesActor.tell(leaveGame, self());
                     System.out.println("leaveGame = " + leaveGame);
+                    break;
+                case "ready":
+                    final GameMssg.Ready ready = new GameMssg.Ready(gameName);
+                    gamesActor.tell(ready, self());
+                default:
                     break;
             }
         }

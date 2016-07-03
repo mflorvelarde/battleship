@@ -46,9 +46,9 @@ public class GamesActor extends UntypedActor {
             if (players2.containsKey(player1Id)) {
                 final ActorRef oldActorRef = players2.replace(player1Id, player1ActorRef);
                 if (games.containsKey(player1Id)) {
-                    final ActorRef actorRef = games.get(player1Id);
-                    if (actorRef != null) {
-                        actorRef.forward(new ContinueGame(player1, oldActorRef), context());
+                    final ActorRef game = games.get(player1Id);
+                    if (game != null) {
+                        game.forward(new ContinueGame(player1, oldActorRef), context());
                         log.info("Usuario reconectado a juego");
                         return;
                     }
@@ -90,7 +90,10 @@ public class GamesActor extends UntypedActor {
                 return;
             }
         }
-//        if (message instanceof CreateGame) {
+        if (message instanceof GameMssg.Ready) {
+            final GameMssg.Ready ready = (GameMssg.Ready) message;
+            final String gameName = ready.gameName;
+            getContext().getChild(gameName).forward(ready, context());
 //            final CreateGame createGame = (CreateGame) message;
 //            log.debug("CreateGame");
 //            final long player1Id = createGame.player1.playerDBId;
@@ -103,7 +106,7 @@ public class GamesActor extends UntypedActor {
 //
 //            games.put(player1Id, gameChild);
 //            games.put(player2Id, gameChild);
-//        }
+        }
 
         if (message instanceof GameMssg.SetShip) {
             final GameMssg.SetShip setShip = (GameMssg.SetShip) message;
