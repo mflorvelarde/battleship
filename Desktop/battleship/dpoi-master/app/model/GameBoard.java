@@ -59,7 +59,7 @@ public class GameBoard {
     }
 
     public HitResult receiveShoot(int row, int col) {
-        final int shipId = myBoard[row][col];
+        final int shipId = myBoard[row - 1][col - 1];
 
         HitResult result;
         final Ship ship = getShipFromId(shipId);
@@ -73,9 +73,12 @@ public class GameBoard {
     }
 
     public void annotate(int row, int col, HitResult hitResult) {
-        if (hitResult.equals(HitResult.MISS))
-            opponentBoard[row][col] = WATER;
+        final int i = row - 1;
+        final int j = col - 1;
+        if (hitResult.equals(HitResult.MISS)) {
+            opponentBoard[i][j] = WATER;
+        }
         else
-            opponentBoard[row][col] = HIT;
+            opponentBoard[i][j] = HIT;
     }
 }
