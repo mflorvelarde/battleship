@@ -34,14 +34,13 @@ public class GameActor extends AbstractActor {
     private HashSet<String> playerReadyToPlay = new HashSet<>();
 
     private final HashMap<ActorRef, GameBoard> gameBoards = new HashMap<>();
-    private Player userPlaying;
+    private Player userPlaying = null;
 
     public GameActor() {
         receive(ReceiveBuilder
                 .match(CreateGame.class, createGame -> {
                     //TODO ver si puedo instanciarlo en el constructor
                     this.game = createGame(createGame);
-                    userPlaying = game.getPlayerBoard().getOwner();
 
                     final GameMssg.GameCreated gameCreated = new GameMssg.GameCreated(self().path().name());
                     gameBoards.keySet().forEach(actorRef -> actorRef.tell(gameCreated, self()));
