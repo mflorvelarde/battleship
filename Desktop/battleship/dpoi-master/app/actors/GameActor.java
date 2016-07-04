@@ -57,11 +57,10 @@ public class GameActor extends AbstractActor {
                             final GameBoard opponentGameBoard = gameBoards.get(opponentRef);
                             final HitResult hitResult = opponentGameBoard.receiveShoot(shoot.row, shoot.col);
 
-
-
                             final GameMssg.ShootResult shootResult;
                             final GameMssg.ReceiveShoot receiveShoot;
-                            if (hitResult.name().equals(HitResult.WIN.name())) {
+                            final boolean won = hitResult.name().equals(HitResult.WIN.name());
+                            if (won) {
                                 receiveShoot = new GameMssg.ReceiveShoot(shoot.row, shoot.col, HitResult.LOOSE);
                                 shootResult = new GameMssg.ShootResult(shoot.row, shoot.col, HitResult.WIN);
                             } else {
@@ -71,7 +70,7 @@ public class GameActor extends AbstractActor {
                             opponentRef.tell(receiveShoot, self());
                             sender().tell(shootResult, self());
                             playerBoard.annotate(shoot.row, shoot.col, hitResult);
-                            changeTurn();
+                            if (!won) changeTurn();
                         }
                     }
                 })
