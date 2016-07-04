@@ -74,9 +74,9 @@ function shootResult(message) {
     var colResult = message.col;
     var result = message.result;
 
-    if(result == "sink")
+    if(result == "sink") {
         turnCellToFire(currentCell);
-        alert(""You sank the ship!);
+        alert("You sank the ship!");
     } else if(result == "hit") {
         turnCellToFire(currentCell);
     } else {

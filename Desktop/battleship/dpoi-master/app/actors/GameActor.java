@@ -57,19 +57,20 @@ public class GameActor extends AbstractActor {
                             final GameBoard opponentGameBoard = gameBoards.get(opponentRef);
                             final HitResult hitResult = opponentGameBoard.receiveShoot(shoot.row, shoot.col);
 
-                            if (!hitResult.name().equals(HitResult.WIN.name())) {
-                                final GameMssg.ReceiveShoot receiveShoot = new GameMssg.ReceiveShoot(shoot.row, shoot.col, hitResult);
-                                opponentRef.tell(receiveShoot, self());
-                                final GameMssg.ShootResult shootResult = new GameMssg.ShootResult(shoot.row, shoot.col, hitResult);
-                                sender().tell(shootResult, self());
-                            } else {
-                                final GameMssg.EndGame endGame = new GameMssg.EndGame(WIN);
-                                sender().tell(endGame, self());
-                                getOpponentRef().tell(new GameMssg.EndGame(FinishedGameStatus.LOOSE), self());
-                            }
-                            playerBoard.annotate(shoot.row, shoot.col, hitResult);
 
-                            //Change turn
+
+                            final GameMssg.ShootResult shootResult;
+                            final GameMssg.ReceiveShoot receiveShoot;
+                            if (hitResult.name().equals(HitResult.WIN.name())) {
+                                receiveShoot = new GameMssg.ReceiveShoot(shoot.row, shoot.col, HitResult.LOOSE);
+                                shootResult = new GameMssg.ShootResult(shoot.row, shoot.col, HitResult.WIN);
+                            } else {
+                                receiveShoot = new GameMssg.ReceiveShoot(shoot.row, shoot.col, hitResult);
+                                shootResult = new GameMssg.ShootResult(shoot.row, shoot.col, hitResult);
+                            }
+                            opponentRef.tell(receiveShoot, self());
+                            sender().tell(shootResult, self());
+                            playerBoard.annotate(shoot.row, shoot.col, hitResult);
                             changeTurn();
                         }
                     }

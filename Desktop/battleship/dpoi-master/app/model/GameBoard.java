@@ -42,13 +42,11 @@ public class GameBoard {
         final Ship ship = factoryShip.getShip(size);
         ships.add(ship);
         final int shipId = ship.getId();
-        System.out.println("shipId = " + shipId);
         for (final int row : rows) {
             for (final int col : cols) {
                 myBoard[row - 1][col - 1] = shipId;
             }
         }
-        System.out.println(Arrays.deepToString(myBoard));
     }
 
     @Nullable
@@ -78,10 +76,7 @@ public class GameBoard {
     public void annotate(int row, int col, HitResult hitResult) {
         final int i = row - 1;
         final int j = col - 1;
-        if (hitResult.equals(HitResult.MISS)) {
-            opponentBoard[i][j] = WATER;
-        }
-        else
-            opponentBoard[i][j] = HIT;
+        if (hitResult.equals(HitResult.MISS)) opponentBoard[i][j] = WATER;
+        else opponentBoard[i][j] = HIT;
     }
 }
