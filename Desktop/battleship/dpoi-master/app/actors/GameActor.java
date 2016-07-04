@@ -110,7 +110,9 @@ public class GameActor extends AbstractActor {
                 })
                 .match(GameMssg.Ready.class, ready -> {
                     playerReadyToPlay.add(sender().path().name());
+                    log.info("Entre a Ready, players ready: " + playerReadyToPlay.size());
                     if (playerReadyToPlay.size() > 1 && userPlaying == null) {
+                        log.info("Se otorga un turno");
                         changeTurn();
                     }
                 })
