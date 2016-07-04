@@ -115,6 +115,7 @@ public class PlayerActor extends UntypedActor{
                 case "ready":
                     final GameMssg.Ready ready = new GameMssg.Ready(gameName);
                     gamesActor.tell(ready, self());
+                    System.out.println("ready = " + ready);
                 default:
                     break;
             }
