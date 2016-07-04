@@ -80,7 +80,10 @@ public class PlayerActor extends UntypedActor{
         if (msg instanceof JsonNode) {
             final JsonNode json = (JsonNode) msg;
             final String type = json.get("type").textValue();
-            final String gameName = json.get("gameName").textValue();
+            String gameName = null;
+            if (json.get("gameName") != null) {
+                gameName = json.get("gameName").textValue();
+            }
             final ObjectMapper objectMapper = new ObjectMapper();
 
             switch (type) {
