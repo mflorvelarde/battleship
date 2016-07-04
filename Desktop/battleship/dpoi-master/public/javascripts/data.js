@@ -74,8 +74,9 @@ function shootResult(message) {
     var colResult = message.col;
     var result = message.result;
 
-    if(result == "sink") {
+    if(result == "sink")
         turnCellToFire(currentCell);
+        alert(""You sank the ship!);
     } else if(result == "hit") {
         turnCellToFire(currentCell);
     } else {
@@ -284,6 +285,14 @@ function setReadyToPlay(element) {
     setShipReady(locationShip6);
     setShipReady(locationShip7);
     setShipReady(locationShip8);
+
+    var ready = {};
+
+    ready["type"] = "ready";
+    ready["gameName"] = gameName;
+    var json = JSON.stringify(ready);
+    ws.send(json);
+
 }
 
 
