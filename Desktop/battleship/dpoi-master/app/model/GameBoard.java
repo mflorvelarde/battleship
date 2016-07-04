@@ -6,6 +6,7 @@ import model.ships.Ship;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -41,11 +42,13 @@ public class GameBoard {
         final Ship ship = factoryShip.getShip(size);
         ships.add(ship);
         final int shipId = ship.getId();
+        System.out.println("shipId = " + shipId);
         for (final int row : rows) {
             for (final int col : cols) {
                 myBoard[row - 1][col - 1] = shipId;
             }
         }
+        System.out.println(Arrays.deepToString(myBoard));
     }
 
     @Nullable

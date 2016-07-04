@@ -8,6 +8,10 @@ import static model.ships.ShipType.*;
 public class FactoryShip {
     private int id;
 
+    public FactoryShip() {
+        id = 1;
+    }
+
     public Ship getShip(int size) {
         switch (size) {
             case 1: return new Ship(MINESWEEPER, id++);
