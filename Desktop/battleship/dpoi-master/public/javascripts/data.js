@@ -238,7 +238,7 @@ function receiveShot(message) {
     if (board[cellNumber - 1] == 0) document.getElementById(cellId).className += " water-cell";
     else document.getElementById(cellId).className += " fired-cell";
 
-    if(message.result = "loose") openLoosingModal();
+    if(message.result == "loose") openLoosingModal();
 }
 
 
@@ -336,7 +336,7 @@ function openWinnningModal() {
 
 function openLoosingModal() {
     alert("Ooohh: you lost!");
-    window.location.href = "/";
+    //window.location.href = "/";
 }
 function leaveGame(){
     var jsonObj = [];

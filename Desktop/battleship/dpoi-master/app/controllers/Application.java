@@ -27,7 +27,7 @@ public class Application extends Controller {
     @Transactional
     public  Result home() {
         String player = session("player");
-        if ( player == null) return forbidden(login.render());
+        if ( player == null)  return ok(home.render(request(), player, "", ""));//TODO le tengo q pasar vacio??
         else {
             session("player", player);
             return ok(home.render(request(), player, "", ""));//TODO le tengo q pasar vacio??
