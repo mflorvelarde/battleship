@@ -79,6 +79,12 @@ function shootResult(message) {
         alert("You sank the ship!");
     } else if(result == "hit") {
         turnCellToFire(currentCell);
+        alert("You hit a ship!");
+    } else if(result == "miss") {
+        turnCellToWater(currentCell);
+    }else if (result == "win") {
+        turnCellToFire(currentCell);
+        openWinnningModal();
     } else {
         turnCellToWater(currentCell);
     }
@@ -159,7 +165,6 @@ function shoot(element) {
     var jsonObj = [];
     var arrayFinal = {};
     var shoot = {};
-    var arrayGameName = {};
     var row = {};
     var col = {};
     shoot["type"] = "shoot";
@@ -178,8 +183,6 @@ function shoot(element) {
     for(var i =0 ;  i < elements.length; i++) {
         elements[i].removeAttribute("onclick")
     }
-
-//    document.getElementById("player-header").style.background =  '#e7e7e7';
 
     document.getElementById("opponent-header").className += " active-player";
     document.getElementById("player-header").className = document.getElementById("opponent-header").className.replace(/(?:^|\s)active-player(?!\S)/g, ' ');
@@ -234,6 +237,8 @@ function receiveShot(message) {
     var cellId = "cell-" + cellNumber.toString();
     if (board[cellNumber - 1] == 0) document.getElementById(cellId).className += " water-cell";
     else document.getElementById(cellId).className += " fired-cell";
+
+    if(message.result = "loose") openLoosingModal();
 }
 
 
