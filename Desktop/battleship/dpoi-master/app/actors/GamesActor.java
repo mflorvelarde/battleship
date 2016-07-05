@@ -9,6 +9,7 @@ import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,13 +19,13 @@ import java.util.Map;
  * Created by tomasnajun on 20/06/16.
  */
 public class GamesActor extends UntypedActor {
-    //<PlayerActorRef, PlayerId>
+    /** <PlayerActorRef, PlayerId> */
     private final Map<ActorRef, Long> players = new HashMap<>();
-    //<PlayerId, PlayerActorRef>
-    private final Map<Long, ActorRef> players2 = new HashMap<>(); //TODO es necesario que sean mapa
-    //<PlayerId, PlayerActorRef>
-    private final Map<Long, ActorRef> waitingPlayers = new HashMap<>(); //TODO es necesario que sean mapa
-    // <PlayerId, GameActorRef>
+    /** <PlayerId, PlayerActorRef> */
+    private final Map<Long, ActorRef> players2 = new HashMap<>(); //TODO es necesario que sean mapa?
+    /** <PlayerId, PlayerActorRef> */
+    private final Map<Long, ActorRef> waitingPlayers = new HashMap<>(); //TODO es necesario que sean mapa?
+    /** <PlayerId, GameActorRef> */
     private final Map<Long, ActorRef> games = new HashMap<>();
 
     private static final String GAME = "game-";
@@ -41,7 +42,7 @@ public class GamesActor extends UntypedActor {
 //            if (players.containsKey(player1ActorRef)) {
 //                players.replace(player1ActorRef, player1Id);
 //            } else
-                players.put(player1ActorRef, player1Id);
+            players.put(player1ActorRef, player1Id);
 
             if (players2.containsKey(player1Id)) {
                 final ActorRef oldActorRef = players2.replace(player1Id, player1ActorRef);
@@ -59,7 +60,7 @@ public class GamesActor extends UntypedActor {
                     waitingPlayers.put(player1Id, player1ActorRef);
                     log.info("usuario Agregado");
                 } else {
-                    //TODO desconectar
+                    //TODO descomentar
 //                    if (waitingPlayers.containsKey(player1Id)) {
 //                        waitingPlayers.replace(player1Id, player1ActorRef);
 //                    }
@@ -94,18 +95,6 @@ public class GamesActor extends UntypedActor {
             final GameMssg.Ready ready = (GameMssg.Ready) message;
             final String gameName = ready.gameName;
             getContext().getChild(gameName).forward(ready, context());
-//            final CreateGame createGame = (CreateGame) message;
-//            log.debug("CreateGame");
-//            final long player1Id = createGame.player1.playerDBId;
-//            final long player2Id = createGame.player2.playerDBId;
-//            final String gameName = GAME + player1Id + player2Id;
-//
-//            final Props props = Props.create(GameActor.class);
-//            final ActorRef gameChild = context().actorOf(props, gameName);
-//            gameChild.forward(createGame, context());
-//
-//            games.put(player1Id, gameChild);
-//            games.put(player2Id, gameChild);
         }
 
         if (message instanceof GameMssg.SetShip) {
@@ -125,14 +114,9 @@ public class GamesActor extends UntypedActor {
             final String gameName = leaveGame.gameName;
             getContext().getChild(gameName).forward(leaveGame, context());
 
-            // forward this message to the associated GameActor
-
             leaveGame.gameName()
                     .map(getContext()::getChild)
                     .<Iterable<ActorRef>>map(Collections::singletonList);
-            //or otherwise to everyone
-//                    .orElse(getContext().getChildren())
-//                    .forEach(child -> child.forward(leaveGame, context()));
         }
 
         if (message instanceof GameMssg.PlayerDisconnected) {
