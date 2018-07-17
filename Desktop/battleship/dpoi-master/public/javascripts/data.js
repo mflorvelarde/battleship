@@ -1,14 +1,16 @@
+/*
 window.onload = function() {
  alert("Waiting for an oponent to join. You can locate your ships");
  document.getElementById("ready-button").style.display = 'none';
 };
+*/
 
-var facebookId = 1234;
-var gameName;
-var ws;
-var currentCell;
+/*var facebookId = 1234;
+var gameName;*/
+//var ws;
+//var currentCell;
 
-var board = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+/*var board = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -18,8 +20,9 @@ var board = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-];
+];*/
 
+/*
 $(function() {
     ws = new WebSocket($("body").data("ws-url"));
     // joinGame();
@@ -46,16 +49,17 @@ $(function() {
         joinGame();
     }
 });
+*/
 
-function gameCreated (message) {
+/*function gameCreated (message) {
     this.gameName = message.gameName;
     alert("Your opponent joined. Let's play!");
     document.getElementById("ready-button").style.display = 'block';
-}
-
+}*/
+/*
 function yourTurn(message) {
-/*    document.getElementById("player-header").style.background = "#87CEEB !important";
-    document.getElementById("opponent-header").style.background = "#4169E1 !important";*/
+/!*    document.getElementById("player-header").style.background = "#87CEEB !important";
+    document.getElementById("opponent-header").style.background = "#4169E1 !important";*!/
     document.getElementById("player-header").className += " active-player";
     if (document.getElementById("opponent-header").className.match(/(?:^|\s)active-player(?!\S)/)) {
         document.getElementById("opponent-header").className = document.getElementById("opponent-header").className.replace(/(?:^|\s)active-player(?!\S)/g, ' ');
@@ -67,11 +71,12 @@ function yourTurn(message) {
     for(var i =0 ;  i < elements.length; i++) {
         elements[i].setAttribute("onclick", "shoot(this)");
    }
-}
+}*/
 
+/*
 function shootResult(message) {
-    var rowResult = message.row;
-    var colResult = message.col;
+   /!* var rowResult = message.row;
+    var colResult = message.col;*!/
     var result = message.result;
 
     if(result == "sink") {
@@ -89,7 +94,9 @@ function shootResult(message) {
         turnCellToWater(currentCell);
     }
 }
+*/
 
+/*
 function endGame(message) {
     alert(message);
 }
@@ -103,8 +110,9 @@ function joinGame () {
     var jsonFinale = JSON.stringify(array);
     ws.send(jsonFinale);
 }
+*/
 
-$(function () {
+/*$(function () {
     $(".draggable").draggable({
         grid: [50, 50], containment: ".containment-wrapper", scroll: false,
         stop: function () {
@@ -127,7 +135,7 @@ $(function () {
             else if (this.className.match(/(?:^|\s)length-2(?!\S)/)) length = 2;
             else length = 3;
 
-            var cell = (10 * ( fila - 1)) + columna;
+            //var cell = (10 * ( fila - 1)) + columna;
 
             for (var i = 1; i <= 100; i++) {
                 if (board[i] == id) board[i] = 0;
@@ -147,8 +155,9 @@ $(function () {
 
         }
     });
-});
+});*/
 
+/*
 function rotateShip(id) {
     var element = document.getElementById(id);
     if (element.className.match(/(?:^|\s)orient-v(?!\S)/)) {
@@ -157,9 +166,11 @@ function rotateShip(id) {
         document.getElementById(id).className += " orient-v";
     }
 }
+*/
 
+/*
 function shoot(element) {
-    this.currentCell = element;
+  //  this.currentCell = element;
     var fila = ((element.offsetTop) - 20 ) / 50;
     var columna = ((element.offsetLeft - 15 ) / 50 ) + 1;
     var jsonObj = [];
@@ -188,19 +199,23 @@ function shoot(element) {
     document.getElementById("player-header").className = document.getElementById("opponent-header").className.replace(/(?:^|\s)active-player(?!\S)/g, ' ');
 
 }
+*/
 
 
+/*
 function turnCellToFire(element) {
     element.className += " fired-cell";
-/*    element.disabled = true;
+/!*    element.disabled = true;
     element.prop("onclick", null);
-    console.log("onclick property: ", $element[0].onclick);*/
+    console.log("onclick property: ", $element[0].onclick);*!/
 }
 
 function turnCellToWater(element) {
     element.className += " water-cell"
 }
+*/
 
+/*
 function locateShip(x, y, orientation, length, id) {
     var cell = (10 * ( y - 1)) + x;
     if (orientation == "orient-v") {
@@ -213,8 +228,9 @@ function locateShip(x, y, orientation, length, id) {
             board[i - 1] = id;
         }
     }
-}
+}*/
 
+/*
 function verifyCellsAvailability(x, y, orientation, length) {
     var cell = (10 * ( y - 1)) + x;
     if (orientation == "orient-v") {
@@ -229,7 +245,9 @@ function verifyCellsAvailability(x, y, orientation, length) {
     }
     return true;
 }
+*/
 
+/*
 function receiveShot(message) {
     var x = message.col;
     var y = message.row;
@@ -240,8 +258,10 @@ function receiveShot(message) {
 
     if(message.result === "loose") openLoosingModal();
 }
+*/
 
 
+/*
 function setReadyToPlay(element) {
     element.style.display = 'none';
     var id;
@@ -299,8 +319,10 @@ function setReadyToPlay(element) {
     ws.send(json);
 
 }
+*/
 
 
+/*
 function setShipReady(locationShip) {
     if (locationShip.length === 0) return;
     var shipRow;
@@ -327,6 +349,8 @@ function setShipReady(locationShip) {
     var jsonFinale = JSON.stringify(setShip);
     ws.send(jsonFinale);
 }
+*/
+/*
 
 
 function openWinnningModal() {
@@ -349,4 +373,4 @@ function leaveGame(){
     var jsonFinale = JSON.stringify(array);
     ws.send(jsonFinale);
     window.location.href = "/";
-}
+}*/
